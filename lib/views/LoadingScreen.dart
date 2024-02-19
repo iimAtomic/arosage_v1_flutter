@@ -1,5 +1,6 @@
+import 'package:arosagev1_flutter/views/MessagePage.dart';
 import 'package:flutter/material.dart';
-import 'messagePage.dart';
+
 
 class LoadingScreen extends StatefulWidget {
   @override

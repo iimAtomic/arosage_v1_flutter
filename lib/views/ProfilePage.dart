@@ -137,8 +137,8 @@ class _ProfilePageState extends State<ProfilePage> {
         // Implémentez la fonctionnalité du bouton ici
       },
       style: ElevatedButton.styleFrom(
-        primary: Colors.white,
-        onPrimary: Colors.black,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),

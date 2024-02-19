@@ -1,5 +1,6 @@
+import 'package:arosagev1_flutter/views/ProfilePage.dart';
 import 'package:flutter/material.dart';
-import 'profilepage.dart'; // Assurez-vous d'avoir ce fichier avec le contenu nécessaire
+// Assurez-vous d'avoir ce fichier avec le contenu nécessaire
 
 class MessagePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
