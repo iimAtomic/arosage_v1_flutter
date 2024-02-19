@@ -1,5 +1,6 @@
+import 'package:arosagev1_flutter/views/LoadingScreen.dart';
 import 'package:flutter/material.dart';
-import 'views/LoadingScreen.DART'; // Assurez-vous que le chemin d'importation est correct.
+
 
 void main() => runApp(MyApp());
 
