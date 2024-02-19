@@ -24,7 +24,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return Scaffold(
       backgroundColor: Color(0xFF2C3438),
       body: Center(
-        child: Image.asset('assets/logo.png'),
+        child: Image.asset('logo.png'),
       ),
     );
   }
