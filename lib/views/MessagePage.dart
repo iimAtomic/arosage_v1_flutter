@@ -1,5 +1,8 @@
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
+import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:flutter/material.dart';
+
+import 'inscription.dart';
 // Assurez-vous d'avoir ce fichier avec le contenu nécessaire
 
 class MessagePage extends StatelessWidget {
@@ -54,6 +57,26 @@ class MessagePage extends StatelessWidget {
                 ));
               },
             ),
+            ListTile(
+              leading: Icon(Icons.login),
+              title: Text('Connexion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SignupPage(),
+                ));
+              },
+            ),
+             ListTile(
+              leading: Icon(Icons.login),
+              title: Text('Inscripeion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SignupPage(),
+                ));
+              },
+            ),
             // Ajoutez d'autres options de menu ici
           ],
         ),
@@ -64,7 +87,8 @@ class MessagePage extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage('assets/plante8.jpeg'), // Vérifiez que le chemin d'accès est correct
+              backgroundImage: AssetImage(
+                  'assets/plante8.jpeg'), // Vérifiez que le chemin d'accès est correct
             ),
             title: Text('Nom de l\'expéditeur $index'),
             subtitle: Text('Extrait du message $index'),

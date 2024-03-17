@@ -1,6 +1,6 @@
 import 'package:arosagev1_flutter/views/MessagePage.dart';
 import 'package:flutter/material.dart';
-
+import 'inscription.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -8,7 +8,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -17,7 +16,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   _navigateToHome() async {
     await Future.delayed(Duration(seconds: 3), () {});
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MessagePage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => SignupPage()));
   }
 
   @override
