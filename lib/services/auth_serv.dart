@@ -1,21 +1,34 @@
-// auth_service.dart
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<bool> registerUser(Map<String, dynamic> userData) async {
-  final url = Uri.parse('API LINK');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: json.encode(userData),
+Future<User> login(String pseudo, String pwd) async {
+  final response = await http.get(
+    Uri.parse('http://192.168.156.189:3000/api/user/v1/get'),
+    headers: {
+      'pseudo': pseudo,
+      'pwd': pwd,
+    },
   );
 
-  // Vérifie si le code de statut est 200 OK ou 201 Created
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    return true;
+  if (response.statusCode == 200) {
+    return User.fromJson(jsonDecode(response.body));
   } else {
-    // affichage de la reponse en cas d'echec
-    print('Erreur d\'inscription: ${response.body}');
-    return false;
+    throw Exception('Échec de la connexion');
+  }
+}
+
+class User {
+  final String pseudo;
+  final String nom;
+  final String prenom;
+  User({required this.pseudo, required this.nom, required this.prenom});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      pseudo: json['pseudo'],
+      nom: json['nom'],
+      prenom: json['prenom'],
+    );
   }
 }

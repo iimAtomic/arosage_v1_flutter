@@ -51,9 +51,23 @@ class _SignupPageState extends State<SignupPage> {
               },
               child: Text('Créer le compte'),
             ),
+
+             ListTile(
+              leading: Icon(Icons.login),
+              title: Text('Inscription'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SignupPage(),
+                ));
+              },
+            ),
           ],
         ),
+
       ),
+
+      
     );
   }
 }

@@ -1,9 +1,10 @@
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
 import 'package:arosagev1_flutter/views/connexion.dart';
+import 'package:arosagev1_flutter/views/plantesPage.dart';
 import 'package:flutter/material.dart';
 
 import 'inscription.dart';
-// Assurez-vous d'avoir ce fichier avec le contenu nécessaire
+
 
 class MessagePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -49,11 +50,11 @@ class MessagePage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
+              title: Text('Plantes'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProfilePage(),
+                  builder: (context) => PlantesPage(),
                 ));
               },
             ),
@@ -63,13 +64,13 @@ class MessagePage extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SignupPage(),
+                  builder: (context) => LoginPage(),
                 ));
               },
             ),
              ListTile(
               leading: Icon(Icons.login),
-              title: Text('Inscripeion'),
+              title: Text('Inscription'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
