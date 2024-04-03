@@ -3,6 +3,7 @@ import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:arosagev1_flutter/views/plantesPage.dart';
 import 'package:flutter/material.dart';
 
+import 'custom_drawer.dart';
 import 'inscription.dart';
 
 
@@ -30,58 +31,8 @@ class MessagePage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 25),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.green,
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Messages'),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Plantes'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PlantesPage(),
-                ));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Connexion'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ));
-              },
-            ),
-             ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Inscription'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SignupPage(),
-                ));
-              },
-            ),
-            // Ajoutez d'autres options de menu ici
-          ],
-        ),
-      ),
+       drawer: CustomDrawer(),
+           
       body: ListView.separated(
         itemCount: 20, // Le nombre de messages factices à afficher
         separatorBuilder: (context, index) => Divider(),

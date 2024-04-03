@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+import 'custom_drawer.dart';
+
 class PlantesPage extends StatefulWidget {
   @override
   _PlantesPageState createState() => _PlantesPageState();
@@ -26,7 +28,7 @@ class _PlantesPageState extends State<PlantesPage> {
     // Récupérer la liste des plantes
     var url = Uri.parse('http://localhost:3000/api/user/v1/plante');
     var response =
-        await http.get(url, headers: {"idUser": "1", "pwd": "pCRas"});
+        await http.get(url, headers: {"idUser": "1", "pwd": "znlal"});
     if (response.statusCode == 200) {
       setState(() {
         _plantes = json.decode(response.body);
@@ -42,8 +44,8 @@ class _PlantesPageState extends State<PlantesPage> {
     var request = http.MultipartRequest("POST", url)
       ..fields['nom'] = _nom
       ..fields['desc'] = _desc
-      ..headers['pseudo'] = 'XdaQQ'
-      ..headers['userPwd'] = 'pCRas'
+      ..headers['pseudo'] = 'ejnym'
+      ..headers['userPwd'] = 'znlal'
       ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
     var response = await request.send();
     if (response.statusCode == 200) {
@@ -101,6 +103,7 @@ class _PlantesPageState extends State<PlantesPage> {
       appBar: AppBar(
         title: const Text('Mes Plantes'),
       ),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -109,7 +112,8 @@ class _PlantesPageState extends State<PlantesPage> {
               child: Column(
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Nom de la plante'),
+                    decoration:
+                        const InputDecoration(labelText: 'Nom de la plante'),
                     onSaved: (value) => _nom = value!,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -139,6 +143,7 @@ class _PlantesPageState extends State<PlantesPage> {
                         if (_image != null) {
                           _addPlante();
                         } else {
+                          _addPlante();
                           print("Veuillez sélectionner une image");
                         }
                       }

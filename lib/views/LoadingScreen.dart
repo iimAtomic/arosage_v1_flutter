@@ -18,7 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   _navigateToHome() async {
     await Future.delayed(Duration(seconds: 3), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+        context, MaterialPageRoute(builder: (context) => MessagePage()));
   }
 
   @override

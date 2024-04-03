@@ -3,6 +3,8 @@ import 'package:arosagev1_flutter/services/auth_serv.dart';
 import 'package:arosagev1_flutter/views/MessagePage.dart';
 import 'package:flutter/material.dart';
 
+import 'custom_drawer.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
