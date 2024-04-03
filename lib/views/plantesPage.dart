@@ -26,9 +26,9 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _fetchPlantes() async {
     // Récupérer la liste des plantes
-    var url = Uri.parse('http://localhost:3000/api/user/v1/plante');
+    var url = Uri.parse('http://172.30.96.1:3000/api/user/v1/plante');
     var response =
-        await http.get(url, headers: {"idUser": "1", "pwd": "znlal"});
+        await http.get(url, headers: {"pseudo": "test"});
     if (response.statusCode == 200) {
       setState(() {
         _plantes = json.decode(response.body);
@@ -40,14 +40,16 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _addPlante() async {
     // Ajouter une nouvelle plante
-    var url = Uri.parse('http://localhost:3000/api/plante/v2/add');
+    var url = Uri.parse('http://172.30.96.1:3000/api/plante/v2/add');
     var request = http.MultipartRequest("POST", url)
-      ..fields['nom'] = _nom
-      ..fields['desc'] = _desc
-      ..headers['pseudo'] = 'ejnym'
-      ..headers['userPwd'] = 'znlal'
+      ..headers['nom'] = _nom
+      ..headers['desc'] = _desc
+      ..headers['pseudo'] = 'test'
+      ..headers['userPwd'] = '12345'
       ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
     var response = await request.send();
+    print(response.statusCode);
+    
     if (response.statusCode == 200) {
       print("Plante ajoutée avec succès");
       _fetchPlantes();
@@ -156,7 +158,7 @@ class _PlantesPageState extends State<PlantesPage> {
             ..._plantes
                 .map((plante) => ListTile(
                       title: Text(plante['nom']),
-                      subtitle: Text(plante['desc']),
+                      subtitle: Text(plante['description']),
                     ))
                 .toList(),
           ],

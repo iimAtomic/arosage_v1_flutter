@@ -4,7 +4,7 @@ import 'dart:convert';
 
 Future<User> login(String pseudo, String pwd) async {
   final response = await http.get(
-    Uri.parse('http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/get'),
+    Uri.parse('http://172.30.96.1:3000/api/user/v1/get'),
     headers: {
       'pseudo': pseudo,
       'pwd': pwd,

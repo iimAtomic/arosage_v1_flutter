@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class UserController {
-  static const String _baseUrl = 'http://192.168.156.189:8080/user/v1/add';
+  static const String _baseUrl = 'http://172.30.96.1:3000/api/user/v1/add';
 
   static Future<void> addUser(String nom, String prenom, String pseudo, String email, String rue, String codeRole, String nomVille, String codePostale, String pwd) async {
     try {
