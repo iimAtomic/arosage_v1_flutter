@@ -1,6 +1,7 @@
 import 'package:arosagev1_flutter/views/plantesPage.dart';
 import 'package:flutter/material.dart';
 import 'MessagePage.dart';
+import 'PlantesFeedPage.dart';
 import 'connexion.dart';
 import 'inscription.dart';
 
@@ -57,11 +58,21 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.call),
-              title: Text('Plante Page'),
+              title: Text('Ajout de plante'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => PlantesPage(),
+                ));
+              },
+            ),
+             ListTile(
+              leading: Icon(Icons.call),
+              title: Text('Fil d:actulaité'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PlantesListPage(),
                 ));
               },
             ),
