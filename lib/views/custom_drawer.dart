@@ -5,29 +5,31 @@ import 'connexion.dart';
 import 'inscription.dart';
 
 class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.green,
+            ),
             child: Text(
               'Menu',
               style: TextStyle(color: Colors.white, fontSize: 25),
             ),
-            decoration: BoxDecoration(
-              color: Colors.green,
-            ),
           ),
           ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Messages'),
+              leading: const Icon(Icons.message),
+              title: const Text('Messages'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Plantes'),
+              leading: const Icon(Icons.account_circle),
+              title: const Text('Plantes'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
@@ -36,8 +38,8 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Connexion'),
+              leading: const Icon(Icons.login),
+              title: const Text('Connexion'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
@@ -46,8 +48,8 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
              ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Inscription'),
+              leading: const Icon(Icons.login),
+              title: const Text('Inscription'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
@@ -56,8 +58,8 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.call),
-              title: Text('Plante Page'),
+              leading: const Icon(Icons.call),
+              title: const Text('Plante Page'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
