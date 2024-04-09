@@ -72,7 +72,7 @@ class CustomDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PlantesListPage(),
+                  builder: (context) => PlantesFeed(),
                 ));
               },
             ),

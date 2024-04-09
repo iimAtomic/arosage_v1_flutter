@@ -26,10 +26,11 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _fetchPlantes() async {
     // Récupérer la liste des plantes
-    var url = Uri.parse('http://172.30.96.1:3000/api/user/v1/plante');
+    var url = Uri.parse('http://localhost:3000/api/user/v1/plante');
     var response =
         await http.get(url, headers: {"pseudo": "test"});
     if (response.statusCode == 200) {
+      print("il existe des plantes ");
       setState(() {
         _plantes = json.decode(response.body);
       });
@@ -40,7 +41,7 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _addPlante() async {
     // Ajouter une nouvelle plante
-    var url = Uri.parse('http://172.30.96.1:3000/api/plante/v2/add');
+    var url = Uri.parse('http://localhost:3000/api/plante/v2/add');
     var request = http.MultipartRequest("POST", url)
       ..headers['nom'] = _nom
       ..headers['desc'] = _desc

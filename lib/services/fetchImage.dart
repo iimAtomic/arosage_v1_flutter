@@ -1,18 +1,22 @@
-// plante_service.dart
-import 'dart:convert';
+/// api_service.dart
 import 'package:http/http.dart' as http;
-import '../models/plante.dart';
+import 'dart:convert';
+import '../models/photo.dart';
 
-final Uri apiUri = Uri.parse("http://localhost:3000/api/plante/v2/images");
+class ApiService {
+  final String _baseUrl = "http://localhost:3000";
 
-class PlanteService {
-  Future<List<Plante>> fetchPlantes() async {
-    var response = await http.get(apiUri);
+  Future<List<Photo>> getPhotosOfPlant(int planteId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/plante/v2/images'),
+      headers: {"planteId": "$planteId"},
+    );
+
     if (response.statusCode == 200) {
-      List<dynamic> plantesJson = json.decode(response.body);
-      return plantesJson.map((json) => Plante.fromJson(json)).toList();
+      List<dynamic> photosJson = json.decode(response.body);
+      return photosJson.map((photoJson) => Photo.fromJson(photoJson)).toList();
     } else {
-      throw Exception('Failed to load plantes');
+      throw Exception('Failed to load photos');
     }
   }
 }
