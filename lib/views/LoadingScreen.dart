@@ -1,3 +1,4 @@
+import 'package:arosagev1_flutter/views/Login.dart';
 import 'package:arosagev1_flutter/views/MessagePage.dart';
 import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToHome();
+    _navigateToLogin();
   }
 
   _navigateToHome() async {
     await Future.delayed(Duration(seconds: 3), () {});
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MessagePage()));
+  }
+
+  _navigateToLogin() async {
+    await Future.delayed(Duration(seconds: 3), () {});
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   @override
