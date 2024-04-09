@@ -1,6 +1,7 @@
 import 'package:arosagev1_flutter/animation/FadeAnimation.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:arosagev1_flutter/views/MessagePage.dart';
+import 'package:arosagev1_flutter/views/inscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -174,10 +175,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 FadeIn(
                                     delay: 1,
-                                    child: const Text(
-                                      "Creer un compte",
-                                      style: TextStyle(color: Colors.grey),
-                                    )),
+                                    child: MaterialButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) => SignupPage(),
+                                          ));
+                                        },
+                                        child: const Text(
+                                          "Creer un compte",
+                                          style: TextStyle(color: Colors.grey),
+                                        ))),
                                 const SizedBox(
                                   height: 40,
                                 ),

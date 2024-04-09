@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:arosagev1_flutter/services/auth_serv.dart';
+import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:http/http.dart' as http;
 
 class UserController {
-  static const String _baseUrl = 'http://172.30.96.1:3000/api/user/v1/add';
+  static const String _baseUrl = 'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/add';
 
   static Future<void> addUser(String nom, String prenom, String pseudo, String email, String rue, String codeRole, String nomVille, String codePostale, String pwd) async {
     try {
@@ -22,6 +26,16 @@ class UserController {
       );
       if (response.statusCode == 200) {
         print('Utilisateur créé avec succès');
+        var data = jsonDecode(response.body.toString());
+        print(data);
+        var user = User.fromJson(jsonDecode(response.body));
+        SecureStorage().writeSecureData("pseudo", user.pseudo);
+        SecureStorage().writeSecureData("password", user.password);
+        print("read pseudo : ");
+        SecureStorage().readSecureData("pseudo");
+        print("read password : ");
+        SecureStorage().readSecureData("password");
+        print("Session credentials saved : ");
       } else {
         print('Échec de la création de l\'utilisateur: ${response.body}');
       }

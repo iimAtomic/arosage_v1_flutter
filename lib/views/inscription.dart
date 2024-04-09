@@ -1,4 +1,6 @@
 import 'package:arosagev1_flutter/services/inscription_serv.dart';
+import 'package:arosagev1_flutter/views/Login.dart';
+import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,6 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _nomVilleController = TextEditingController();
   final TextEditingController _codePostaleController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
+  String dropdownValue = 'P'; // Default value
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,23 @@ class _SignupPageState extends State<SignupPage> {
             TextField(controller: _pseudoController, decoration: InputDecoration(labelText: 'Pseudo')),
             TextField(controller: _emailController, decoration: InputDecoration(labelText: 'Email')),
             TextField(controller: _rueController, decoration: InputDecoration(labelText: 'Rue')),
-            TextField(controller: _codeRoleController, decoration: InputDecoration(labelText: 'Code Role')),
+            DropdownButtonFormField<String>(
+              value: dropdownValue,
+              onChanged: (String? value) {
+                if (value != null) {
+                  setState(() {
+                    dropdownValue = value;
+                    _codeRoleController.text = value;
+                  });
+                }
+              },
+              items: [
+                DropdownMenuItem(child: Text('Propriétaire'), value: 'P'),
+                DropdownMenuItem(child: Text('Gardien'), value: 'G'),
+                DropdownMenuItem(child: Text('Botaniste'), value: 'B'),
+              ],
+              decoration: InputDecoration(labelText: 'Rôle'), // Add label
+            ),
             TextField(controller: _nomVilleController, decoration: InputDecoration(labelText: 'Nom Ville')),
             TextField(controller: _codePostaleController, decoration: InputDecoration(labelText: 'Code Postal')),
             TextField(controller: _pwdController, decoration: InputDecoration(labelText: 'Mot de passe'), obscureText: true),
@@ -51,23 +70,19 @@ class _SignupPageState extends State<SignupPage> {
               },
               child: Text('Créer le compte'),
             ),
-
-             ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Inscription'),
+            ListTile(
+              leading: Icon(Icons.arrow_back),
+              title: Text('Se connecter'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SignupPage(),
+                  builder: (context) => LoginScreen(),
                 ));
               },
             ),
           ],
         ),
-
       ),
-
-      
     );
   }
 }
