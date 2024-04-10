@@ -29,11 +29,9 @@ class _PlantesPageState extends State<PlantesFeed> {
 
   Future<void> _fetchPlantes() async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/plante');
-    var pseudo = await SecureStorage().readSecureData("pseudo");
+        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/all');
     var response = await http.get(
-      url,
-      headers: {"pseudo": pseudo},
+      url
     );
     if (response.statusCode == 200) {
       print("il existe des plantes ");
@@ -155,7 +153,7 @@ class PlantPostCard extends StatelessWidget {
               ),
               TextButton.icon(
                 icon: Icon(Icons.comment, color: Colors.grey),
-                label: Text('Commenter'),
+                label: Text('Commentaire'),
                 onPressed: () {
                   // Action pour commenter
                 },
