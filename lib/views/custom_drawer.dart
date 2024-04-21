@@ -24,13 +24,13 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-              leading: const Icon(Icons.message),
-              title: const Text('Messages'),
+              leading: const Icon(Icons.home),
+              title: const Text('Home X'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: const Icon(Icons.account_circle),
-              title: const Text('Plantes'),
+              leading: const Icon(Icons.message),
+              title: const Text('Message'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
@@ -39,27 +39,7 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.login),
-              title: const Text('Connexion'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ));
-              },
-            ),
-             ListTile(
-              leading: const Icon(Icons.login),
-              title: const Text('Inscription'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SignupPage(),
-                ));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.call),
+              leading: Icon(Icons.add),
               title: Text('Ajout de plante'),
               onTap: () {
                 Navigator.pop(context);
@@ -69,8 +49,8 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
              ListTile(
-              leading: Icon(Icons.call),
-              title: Text('Fil d:actulaité'),
+              leading: Icon(Icons.feed),
+              title: Text('Fil d\'actulaité'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(

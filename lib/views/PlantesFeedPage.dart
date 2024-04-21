@@ -56,6 +56,8 @@ class _PlantesPageState extends State<PlantesFeed> {
           "id": planteId,
           "nom": planteData["nom"],
           "description": planteData["description"],
+          "prenomProprio": planteData["prenomProprio"],
+          "pseudoProprio" : planteData["pseudoProprio"],
           "photoData": photoDataList,
         });
       }
@@ -99,7 +101,7 @@ class _PlantesPageState extends State<PlantesFeed> {
           return PlantPostCard(
             nom: plante['nom'],
             description: plante['description'],
-            imageData: plante['photoData'].isNotEmpty ? plante['photoData'][0]['data'] : null,
+            imageData: plante['photoData'].isNotEmpty ? plante['photoData'][0]['data'] : null, prenom: plante['prenomProprio'],
           );
         },
       ),
@@ -110,13 +112,14 @@ class _PlantesPageState extends State<PlantesFeed> {
 class PlantPostCard extends StatelessWidget {
   final String nom;
   final String description;
+  final String prenom;
   final Uint8List? imageData;
 
   const PlantPostCard({
     Key? key,
     required this.nom,
     required this.description,
-    this.imageData,
+    this.imageData, required this.prenom,
   }) : super(key: key);
 
   @override
@@ -131,7 +134,7 @@ class PlantPostCard extends StatelessWidget {
               child: Icon(Icons.person), // Remplacez par l'image de l'utilisateur si disponible
             ),
             title: Text(nom),
-            subtitle: Text(description),
+            subtitle: Text(prenom),
             trailing: Icon(Icons.more_vert),
           ),
           Padding(
