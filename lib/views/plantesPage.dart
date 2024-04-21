@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:arosagev1_flutter/models/photo.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

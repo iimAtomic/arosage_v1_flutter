@@ -1,6 +1,7 @@
 
 import 'package:arosagev1_flutter/services/auth_serv.dart';
 import 'package:arosagev1_flutter/views/MessagePage.dart';
+import 'package:arosagev1_flutter/views/PlantesFeedPage.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_drawer.dart';
@@ -25,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       // Connectez l'utilisateur et naviguez vers la page d'accueil.
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MessagePage()),
+        MaterialPageRoute(builder: (context) => PlantesFeed()),
       );
     } catch (e) {
       // Affichez une erreur si la connexion échoue.

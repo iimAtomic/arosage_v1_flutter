@@ -31,7 +31,7 @@ class MessagePage extends StatelessWidget {
           ),
         ],
       ),
-       drawer: CustomDrawer(),
+      drawer: CustomDrawer(),
            
       body: ListView.separated(
         itemCount: 20, // Le nombre de messages factices à afficher

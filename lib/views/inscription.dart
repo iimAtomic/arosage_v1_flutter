@@ -233,6 +233,13 @@ class _SignupPageState extends State<SignupPage> {
                       _codePostaleController.text,
                       _pwdController.text,
                     );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Inscription réussie!')),
+                                );
+                                 Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()), // Remplacez AcceuilScreen par l'écran d'accueil de votre app
+                  );
                   } else {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()

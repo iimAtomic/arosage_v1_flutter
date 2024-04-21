@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:arosagev1_flutter/models/photo.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
+import 'package:arosagev1_flutter/views/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -19,12 +20,19 @@ class _ProfilePageState extends State<ProfilePage> {
   List<dynamic> _plantes = [];
   String _nom = '';
   String _desc = '';
+  String? _userPseudo;
   XFile? _image;
 
   @override
   void initState() {
     super.initState();
+    _fetchUserPseudo();
     _fetchPlantes();
+  }
+
+  Future<void> _fetchUserPseudo() async {
+    _userPseudo = await SecureStorage().readSecureData("pseudo");
+    setState(() {}); // Update UI with retrieved pseudo
   }
 
   Future<void> _fetchPlantes() async {
@@ -98,6 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      drawer: CustomDrawer(),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -128,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 80),
                 Text(
-                  'Sukuna Doe',
+                 _userPseudo ?? 'Sukuna Doe',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
