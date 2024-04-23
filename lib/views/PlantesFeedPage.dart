@@ -144,7 +144,7 @@ class _PlantPostCardState extends State<PlantPostCard> {
         commentaires.add(Commentaire.fromJson(item));
       }
 
-      print(Commentaire);
+      print(commentaires);
       return commentaires;
     } else {
       throw Exception("Error retrieving comments");
@@ -343,7 +343,7 @@ class PhotoAro {
 }
 
 class Commentaire {
-  final int  planteId;
+  final int planteId;
   final String conseil;
   final String pseudo;
 
@@ -357,7 +357,8 @@ class Commentaire {
     return Commentaire(
       planteId: json['planteId'],
       conseil: json['conseil'],
-      pseudo: json['pseudo'], // Remplacez 'pseudo' par le nom exact de l'attribut dans votre API
+      pseudo: json[
+          'pseudo'], // Remplacez 'pseudo' par le nom exact de l'attribut dans votre API
     );
   }
 }

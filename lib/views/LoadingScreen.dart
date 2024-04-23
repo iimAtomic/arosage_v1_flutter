@@ -16,11 +16,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
     _navigateToLogin();
   }
 
-  _navigateToHome() async {
-    await Future.delayed(Duration(seconds: 3), () {});
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MessagePage()));
-  }
+  // _navigateToHome() async {
+  //   await Future.delayed(Duration(seconds: 3), () {});
+  //   Navigator.pushReplacement(
+  //       context, MaterialPageRoute(builder: (context) => MessagePage()));
+  // }
 
   _navigateToLogin() async {
     await Future.delayed(Duration(seconds: 3), () {});
