@@ -137,9 +137,9 @@ class _PlantPostCardState extends State<PlantPostCard> {
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/conseils');
     var response =
         await http.get(url, headers: {"planteId": planteId.toString()});
+        List<Commentaire> commentaires = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
-      List<Commentaire> commentaires = [];
       for (var item in jsonData) {
         commentaires.add(Commentaire.fromJson(item));
       }
@@ -147,7 +147,8 @@ class _PlantPostCardState extends State<PlantPostCard> {
       print(commentaires);
       return commentaires;
     } else {
-      throw Exception("Error retrieving comments");
+      print("Erreur lors de la récupération des commentaires");
+      return commentaires;
     }
   }
 
@@ -343,22 +344,18 @@ class PhotoAro {
 }
 
 class Commentaire {
-  final int planteId;
   final String conseil;
   final String pseudo;
 
   Commentaire({
-    required this.planteId,
     required this.conseil,
     required this.pseudo,
   });
 
   factory Commentaire.fromJson(Map<String, dynamic> json) {
     return Commentaire(
-      planteId: json['planteId'],
       conseil: json['conseil'],
-      pseudo: json[
-          'pseudo'], // Remplacez 'pseudo' par le nom exact de l'attribut dans votre API
+      pseudo: json['nom'],
     );
   }
 }
