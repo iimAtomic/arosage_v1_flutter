@@ -357,8 +357,7 @@ class Commentaire {
     return Commentaire(
       planteId: json['planteId'],
       conseil: json['conseil'],
-      pseudo: json[
-          'pseudo'], // Remplacez 'pseudo' par le nom exact de l'attribut dans votre API
+      pseudo: json['pseudo'], 
     );
   }
 }
