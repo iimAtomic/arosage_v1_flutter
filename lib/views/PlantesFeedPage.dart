@@ -5,6 +5,7 @@ import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'custom_dialog.dart';
 
 import 'custom_drawer.dart';
 
@@ -100,7 +101,6 @@ class _PlantesPageState extends State<PlantesFeed> {
     );
   }
 }
-
 class PlantPostCard extends StatefulWidget {
   final String nom;
   final String description;
@@ -137,18 +137,15 @@ class _PlantPostCardState extends State<PlantPostCard> {
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/conseils');
     var response =
         await http.get(url, headers: {"planteId": planteId.toString()});
-        List<Commentaire> commentaires = [];
+    List<Commentaire> commentaires = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
       for (var item in jsonData) {
         commentaires.add(Commentaire.fromJson(item));
       }
-
-      print(commentaires);
       return commentaires;
     } else {
-      print("Erreur lors de la récupération des commentaires");
-      return commentaires;
+      throw Exception("Erreur lors de la récupération des commentaires");
     }
   }
 
@@ -170,17 +167,8 @@ class _PlantPostCardState extends State<PlantPostCard> {
       setState(() {
         _futureConseils = _fetchConseils(planteId);
       });
-
-      print(pseudo);
-      print(planteId);
-      print(conseil);
     } else {
-      // DEBUG LUX
-      print(pseudo);
-      print(planteId);
-      print(conseil);
-
-      throw Exception("Error adding comment");
+      throw Exception("Erreur lors de l'ajout du commentaire");
     }
   }
 
@@ -190,6 +178,7 @@ class _PlantPostCardState extends State<PlantPostCard> {
       elevation: 2.0,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch, // Pour éviter les dépassements de colonnes
         children: [
           ListTile(
             leading: CircleAvatar(
@@ -220,24 +209,23 @@ class _PlantPostCardState extends State<PlantPostCard> {
                 icon: Icon(Icons.comment, color: Colors.grey),
                 label: Text('Commentaire'),
                 onPressed: () {
-                  showDialog(
+                 showDialog(
                     context: context,
                     builder: (context) {
-                      return AlertDialog(
-                        content: CommentBox(
-                          sendButtonMethod: () {
-                            if (_formKey.currentState!.validate()) {
-                              _ajouterConseil(
-                                widget.planteId,
-                                _commentController.text,
-                              );
-                              _commentController.clear();
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          formKey: _formKey,
-                          commentController: _commentController,
-                        ),
+                      return CustomDialog(
+                        futureConseils: _futureConseils,
+                        commentController: _commentController,
+                        formKey: _formKey,
+                        sendButtonMethod: () {
+                          if (_formKey.currentState!.validate()) {
+                            _ajouterConseil(
+                              widget.planteId,
+                              _commentController.text,
+                            );
+                            _commentController.clear();
+                            Navigator.of(context).pop();
+                          }
+                        },
                       );
                     },
                   );
@@ -359,3 +347,5 @@ class Commentaire {
     );
   }
 }
+
+
