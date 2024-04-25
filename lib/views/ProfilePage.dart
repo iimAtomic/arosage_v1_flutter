@@ -172,17 +172,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       var plant = _plantes[index];
                       var photoDataList =
                           plant['photoData'] as List<Map<String, dynamic>>;
-                      var imageUrl = photoDataList.isNotEmpty
+                      var imageData  = photoDataList.isNotEmpty
                           ? photoDataList[0]['data']
-                          : null; // Assuming 'data' holds the URL to the image
+                          : null; 
 
                       return GestureDetector(
-                        onTap: () => _toggleImage(imageUrl),
+                        onTap: () => _toggleImage(imageData),
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(imageUrl ??
-                                  ''), // Use NetworkImage for images from the network
+                              image: MemoryImage(imageData ??
+                                  ''),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(8),
