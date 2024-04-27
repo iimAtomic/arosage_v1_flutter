@@ -1,11 +1,12 @@
 import 'package:arosagev1_flutter/views/LoadingScreen.dart';
-import 'package:arosagev1_flutter/views/Login.dart';
 import 'package:flutter/material.dart';
 
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoadingScreen(), // Utilisez votre écran de chargement ici.
+      home: const LoadingScreen(), // Utilisez votre écran de chargement ici.
     );
   }
 }

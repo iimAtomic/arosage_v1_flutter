@@ -1,10 +1,9 @@
 import 'package:arosagev1_flutter/views/Login.dart';
-import 'package:arosagev1_flutter/views/MessagePage.dart';
-import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:flutter/material.dart';
-import 'inscription.dart';
 
 class LoadingScreen extends StatefulWidget {
+  const LoadingScreen({super.key});
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -23,15 +22,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
   // }
 
   _navigateToLogin() async {
-    await Future.delayed(Duration(seconds: 3), () {});
+    await Future.delayed(const Duration(seconds: 3), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF2C3438),
+      backgroundColor: const Color(0xFF2C3438),
       body: Center(
         child: Image.asset('assets/logo.png'),
       ),

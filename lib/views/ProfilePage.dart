@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
-import 'package:arosagev1_flutter/models/photo.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:arosagev1_flutter/views/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:ui';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -17,9 +17,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String? _selectedImage;
   final _formKey = GlobalKey<FormState>();
-  List<dynamic> _plantes = [];
-  String _nom = '';
-  String _desc = '';
+  final List<dynamic> _plantes = [];
+  final String _nom = '';
+  final String _desc = '';
   String? _userPseudo;
   XFile? _image;
 
@@ -106,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -119,14 +119,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: double.infinity,
                       height: 200,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage("assets/plante3.jpg"),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    Positioned(
+                    const Positioned(
                       top: 150,
                       child: CircleAvatar(
                         radius: 70,
@@ -135,22 +135,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 80),
+                const SizedBox(height: 80),
                 Text(
                  _userPseudo ?? 'Sukuna Doe',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                   ),
                 ),
-                Text(
+                const Text(
                   'CERTIFIED GARDEN DESTROYER',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -160,8 +160,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Expanded(
                   child: GridView.builder(
-                    padding: EdgeInsets.all(8),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    padding: const EdgeInsets.all(8),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   width: double.infinity,
                   color: Colors.green,
-                  child: Icon(Icons.message, color: Colors.white),
+                  child: const Icon(Icons.message, color: Colors.white),
                 ),
               ],
             ),
@@ -228,7 +228,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildCategoryButton(String title) {
     return ElevatedButton(
-      child: Text(title),
       onPressed: () {
         // Implémentez la fonctionnalité du bouton ici
       },
@@ -238,8 +237,9 @@ class _ProfilePageState extends State<ProfilePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
-        side: BorderSide(color: Colors.grey),
+        side: const BorderSide(color: Colors.grey),
       ),
+      child: Text(title),
     );
   }
 }

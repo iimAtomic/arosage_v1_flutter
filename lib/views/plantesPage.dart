@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:arosagev1_flutter/models/photo.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,9 @@ class _PlantesPageState extends State<PlantesPage> {
   Future<void> _fetchPlantes() async {
     var url = Uri.parse(
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/plante');
+
     var pseudo = await SecureStorage().readSecureData("pseudo");
+    
     var response = await http.get(
       url,
       headers: {"pseudo": pseudo},
@@ -89,8 +92,11 @@ class _PlantesPageState extends State<PlantesPage> {
     // Ajouter une nouvelle plante
     var url = Uri.parse(
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/add');
+    
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var password = await SecureStorage().readSecureData("password");
+
+
     var request = http.MultipartRequest("POST", url)
       ..headers['nom'] = _nom
       ..headers['desc'] = _desc

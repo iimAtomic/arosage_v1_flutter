@@ -5,6 +5,8 @@ import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
   @override
   _SignupPageState createState() => _SignupPageState();
 }
@@ -238,7 +240,7 @@ class _SignupPageState extends State<SignupPage> {
                                       content: Text('Inscription réussie!')),
                                 );
                                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginPage()), // Remplacez AcceuilScreen par l'écran d'accueil de votre app
+                    MaterialPageRoute(builder: (context) => const LoginPage()), // Remplacez AcceuilScreen par l'écran d'accueil de votre app
                   );
                   } else {
                     ScaffoldMessenger.of(context)

@@ -1,44 +1,43 @@
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
-import 'package:arosagev1_flutter/views/connexion.dart';
-import 'package:arosagev1_flutter/views/plantesPage.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_drawer.dart';
-import 'inscription.dart';
 
 
 class MessagePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  MessagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Messages'),
+        title: const Text('Messages'),
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.account_circle),
+            icon: const Icon(Icons.account_circle),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePage(),
+                builder: (context) => const ProfilePage(),
               ));
             },
           ),
         ],
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
            
       body: ListView.separated(
         itemCount: 20, // Le nombre de messages factices à afficher
-        separatorBuilder: (context, index) => Divider(),
+        separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
           return ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundImage: AssetImage(
                   'assets/plante8.jpeg'), // Vérifiez que le chemin d'accès est correct
             ),

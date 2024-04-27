@@ -1,13 +1,13 @@
 
 import 'package:arosagev1_flutter/services/auth_serv.dart';
-import 'package:arosagev1_flutter/views/MessagePage.dart';
 import 'package:arosagev1_flutter/views/PlantesFeedPage.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_drawer.dart';
 
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       // Connectez l'utilisateur et naviguez vers la page d'accueil.
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => PlantesFeed()),
+        MaterialPageRoute(builder: (context) => const PlantesFeed()),
       );
     } catch (e) {
       // Affichez une erreur si la connexion échoue.
@@ -44,27 +44,27 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connexion'),
+        title: const Text('Connexion'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextField(
                     controller: _pseudoController,
-                    decoration: InputDecoration(labelText: 'Pseudo'),
+                    decoration: const InputDecoration(labelText: 'Pseudo'),
                   ),
                   TextField(
                     controller: _pwdController,
-                    decoration: InputDecoration(labelText: 'Mot de passe'),
+                    decoration: const InputDecoration(labelText: 'Mot de passe'),
                     obscureText: true,
                   ),
                   ElevatedButton(
                     onPressed: _submit,
-                    child: Text('Se connecter'),
+                    child: const Text('Se connecter'),
                   ),
                 ],
               ),

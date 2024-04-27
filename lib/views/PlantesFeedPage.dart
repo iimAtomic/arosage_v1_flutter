@@ -1,22 +1,22 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'custom_dialog.dart';
 
 import 'custom_drawer.dart';
 
 class PlantesFeed extends StatefulWidget {
+  const PlantesFeed({super.key});
+
   @override
   _PlantesPageState createState() => _PlantesPageState();
 }
 
 class _PlantesPageState extends State<PlantesFeed> {
   final _formKey = GlobalKey<FormState>();
-  List<dynamic> _plantes = [];
+  final List<dynamic> _plantes = [];
 
   @override
   void initState() {
@@ -79,10 +79,10 @@ class _PlantesPageState extends State<PlantesFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Fil d\'actualité'),
+        title: const Text('Fil d\'actualité'),
         backgroundColor: Colors.blue,
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: ListView.builder(
         itemCount: _plantes.length,
         itemBuilder: (context, index) {
@@ -143,10 +143,10 @@ class _PlantPostCardState extends State<PlantPostCard> {
       for (var item in jsonData) {
         commentaires.add(Commentaire.fromJson(item));
       }
-      return commentaires;
     } else {
-      throw Exception("Erreur lors de la récupération des commentaires");
+      print("Erreur lors de la récupération des commentaires");
     }
+    return commentaires;
   }
 
   Future<void> _ajouterConseil(int planteId, String conseil) async {
@@ -181,12 +181,12 @@ class _PlantPostCardState extends State<PlantPostCard> {
         crossAxisAlignment: CrossAxisAlignment.stretch, // Pour éviter les dépassements de colonnes
         children: [
           ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               child: Icon(Icons.person),
             ),
             title: Text(widget.nom),
             subtitle: Text(widget.prenom),
-            trailing: Icon(Icons.more_vert),
+            trailing: const Icon(Icons.more_vert),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -194,20 +194,20 @@ class _PlantPostCardState extends State<PlantPostCard> {
           ),
           widget.imageData != null
               ? Image.memory(widget.imageData!)
-              : Placeholder(fallbackHeight: 200),
+              : const Placeholder(fallbackHeight: 200),
           ButtonBar(
             alignment: MainAxisAlignment.start,
             children: [
               TextButton.icon(
-                icon: Icon(Icons.thumb_up, color: Colors.blue),
-                label: Text('J\'aime'),
+                icon: const Icon(Icons.thumb_up, color: Colors.blue),
+                label: const Text('J\'aime'),
                 onPressed: () {
                   // Action pour 'J'aime'
                 },
               ),
               TextButton.icon(
-                icon: Icon(Icons.comment, color: Colors.grey),
-                label: Text('Commentaire'),
+                icon: const Icon(Icons.comment, color: Colors.grey),
+                label: const Text('Commentaire'),
                 onPressed: () {
                  showDialog(
                     context: context,
@@ -232,8 +232,8 @@ class _PlantPostCardState extends State<PlantPostCard> {
                 },
               ),
               TextButton.icon(
-                icon: Icon(Icons.share, color: Colors.grey),
-                label: Text('Partager'),
+                icon: const Icon(Icons.share, color: Colors.grey),
+                label: const Text('Partager'),
                 onPressed: () {
                   // Action pour partager
                 },
@@ -251,7 +251,7 @@ class CommentBox extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final VoidCallback sendButtonMethod;
 
-  CommentBox({
+  const CommentBox({super.key, 
     required this.commentController,
     required this.formKey,
     required this.sendButtonMethod,
@@ -272,15 +272,15 @@ class CommentBox extends StatelessWidget {
               }
               return null;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Commentaire',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: sendButtonMethod,
-            child: Text('Envoyer'),
+            child: const Text('Envoyer'),
           ),
         ],
       ),

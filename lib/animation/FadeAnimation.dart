@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 
 class FadeIn extends StatelessWidget {
-  FadeIn({required this.delay, required this.child});
+  const FadeIn({super.key, required this.delay, required this.child});
 
   final double delay;
   final Widget child;

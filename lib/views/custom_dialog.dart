@@ -7,7 +7,7 @@ class CustomDialog extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final VoidCallback sendButtonMethod;
 
-  CustomDialog({
+  const CustomDialog({super.key, 
     required this.futureConseils,
     required this.commentController,
     required this.formKey,
@@ -30,7 +30,7 @@ class CustomDialog extends StatelessWidget {
                                           ConnectionState.waiting ||
                                       snapshot.connectionState ==
                                           ConnectionState.none) {
-                                    return Center(
+                                    return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   } else if (snapshot.hasError) {

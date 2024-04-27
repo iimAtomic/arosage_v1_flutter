@@ -1,5 +1,4 @@
 import 'package:arosagev1_flutter/animation/FadeAnimation.dart';
-import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:arosagev1_flutter/views/MessagePage.dart';
 import 'package:arosagev1_flutter/views/inscription.dart';
 import 'package:flutter/material.dart';
@@ -74,24 +73,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 80,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
+                      const Padding(
+                        padding: EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             FadeIn(
                                 delay: 2,
-                                child: const Text(
+                                child: Text(
                                   "Connexion",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 40),
                                 )),
-                            const SizedBox(
+                            SizedBox(
                               height: 10,
                             ),
                             FadeIn(
                                 delay: 3,
-                                child: const Text(
+                                child: Text(
                                   "Bon retour parmis nous",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18),
@@ -180,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => SignupPage(),
+                                            builder: (context) => const SignupPage(),
                                           ));
                                         },
                                         child: const Text(
