@@ -14,10 +14,29 @@ class MessagePage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Messages'),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        flexibleSpace: Stack(
+          fit: StackFit.expand, // ajouter cette ligne
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                      'assets/plante3.jpg'), // chemin vers votre image
+                  fit: BoxFit.cover, // ajustement de l'image
+                ),
+              ),
+            ),
+            Container(
+              color:
+                  Colors.black.withOpacity(0.5), // couleur sombre avec opacité
+            ),
+          ],
+        ),
+        title: const Text(
+          'Messages',
+          style: TextStyle(
+            color: Colors.white, // couleur du titre
+          ),
         ),
         actions: [
           IconButton(
@@ -29,6 +48,7 @@ class MessagePage extends StatelessWidget {
             },
           ),
         ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
       ),
       drawer: const CustomDrawer(),
            

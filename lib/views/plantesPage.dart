@@ -1,8 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:arosagev1_flutter/models/photo.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
+import 'package:arosagev1_flutter/views/ProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -10,13 +12,15 @@ import 'package:image_picker/image_picker.dart';
 import 'custom_drawer.dart';
 
 class PlantesPage extends StatefulWidget {
+  const PlantesPage({super.key});
+
   @override
   _PlantesPageState createState() => _PlantesPageState();
 }
 
 class _PlantesPageState extends State<PlantesPage> {
   final _formKey = GlobalKey<FormState>();
-  List<dynamic> _plantes = [];
+  final List<dynamic> _plantes = [];
   String _nom = '';
   String _desc = '';
   XFile? _image;
@@ -32,7 +36,7 @@ class _PlantesPageState extends State<PlantesPage> {
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/plante');
 
     var pseudo = await SecureStorage().readSecureData("pseudo");
-    
+
     var response = await http.get(
       url,
       headers: {"pseudo": pseudo},
@@ -92,10 +96,9 @@ class _PlantesPageState extends State<PlantesPage> {
     // Ajouter une nouvelle plante
     var url = Uri.parse(
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/add');
-    
+
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var password = await SecureStorage().readSecureData("password");
-
 
     var request = http.MultipartRequest("POST", url)
       ..headers['nom'] = _nom
@@ -122,8 +125,8 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
         _image = image;
@@ -159,76 +162,154 @@ class _PlantesPageState extends State<PlantesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mes Plantes'),
-      ),
-      drawer: CustomDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
+        flexibleSpace: Stack(
+          fit: StackFit.expand, // ajouter cette ligne
           children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Nom de la plante'),
-                    onSaved: (value) => _nom = value!,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer un nom';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Description'),
-                    onSaved: (value) => _desc = value!,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer une description';
-                      }
-                      return null;
-                    },
-                  ),
-                  ElevatedButton(
-                    onPressed: _pickImage,
-                    child: const Text('Sélectionner une image'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        if (_image != null) {
-                          _addPlante();
-                        } else {
-                          _addPlante();
-                          print("Veuillez sélectionner une image");
-                        }
-                      }
-                    },
-                    child: const Text('Ajouter'),
-                  ),
-                ],
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                      'assets/plante3.jpg'), // chemin vers votre image
+                  fit: BoxFit.cover, // ajustement de l'image
+                ),
               ),
             ),
-            ..._plantes.map((plante) {
-              List<Widget> photos = [];
-              if (plante['photoData'] != null) {
-                List<dynamic> photoDataList = plante['photoData'];
-                for (var photoData in photoDataList) {
-                  Uint8List imageData = photoData['data'];
-                  photos.add(Image.memory(imageData));
-                }
-              }
-              return ListTile(
-                title: Text(plante['nom']),
-                subtitle: Text(plante['description']),
-                leading: photos.isNotEmpty
-                    ? photos.first
-                    : Placeholder(), // Display first photo or Placeholder if no photo
-              );
-            }).toList(),
+            Container(
+              color:
+                  Colors.black.withOpacity(0.5), // couleur sombre avec opacité
+            ),
           ],
+        ),
+        title: const Text(
+          'Mes plantes',
+          style: TextStyle(
+            color: Colors.white, // couleur du titre
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ProfilePage(),
+              ));
+            },
+          ),
+        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
+      ),
+      drawer: const CustomDrawer(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Card(
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Nom de la plante',
+                            border: OutlineInputBorder(),
+                          ),
+                          onSaved: (value) => _nom = value!,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer un nom';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Description',
+                            border: OutlineInputBorder(),
+                          ),
+                          onSaved: (value) => _desc = value!,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer une description';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: _pickImage,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            textStyle: const TextStyle(color: Colors.white),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: const Text('Sélectionner une image'),
+                        ),
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              if (_image != null) {
+                                _addPlante();
+                              } else {
+                                _addPlante();
+                                print("Veuillez sélectionner une image");
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 206, 210, 214),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: const Text('Ajouter'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              ..._plantes.map((plante) {
+                List<Widget> photos = [];
+                if (plante['photoData'] != null) {
+                  List<dynamic> photoDataList = plante['photoData'];
+                  for (var photoData in photoDataList) {
+                    Uint8List imageData = photoData['data'];
+                    photos.add(Image.memory(imageData));
+                  }
+                }
+                return Card(
+                  elevation: 4.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ListTile(
+                    title: Text(plante['nom']),
+                    subtitle: Text(plante['description']),
+                    leading: photos.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: photos.first,
+                          )
+                        : const Placeholder(),
+                  ),
+                );
+              }).toList(),
+            ],
+          ),
         ),
       ),
     );

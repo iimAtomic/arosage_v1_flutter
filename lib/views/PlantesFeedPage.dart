@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:arosagev1_flutter/storage/storage.dart';
+import 'package:arosagev1_flutter/views/ProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'custom_dialog.dart';
@@ -79,8 +80,41 @@ class _PlantesPageState extends State<PlantesFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fil d\'actualité'),
-        backgroundColor: Colors.blue,
+        flexibleSpace: Stack(
+          fit: StackFit.expand, // ajouter cette ligne
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                      'assets/plante3.jpg'), // chemin vers votre image
+                  fit: BoxFit.cover, // ajustement de l'image
+                ),
+              ),
+            ),
+            Container(
+              color:
+                  Colors.black.withOpacity(0.5), // couleur sombre avec opacité
+            ),
+          ],
+        ),
+        title: const Text(
+          'Fil d\'actualité',
+          style: TextStyle(
+            color: Colors.white, // couleur du titre
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ProfilePage(),
+              ));
+            },
+          ),
+        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
       ),
       drawer: const CustomDrawer(),
       body: ListView.builder(
@@ -101,6 +135,7 @@ class _PlantesPageState extends State<PlantesFeed> {
     );
   }
 }
+
 class PlantPostCard extends StatefulWidget {
   final String nom;
   final String description;
@@ -175,10 +210,11 @@ class _PlantPostCardState extends State<PlantPostCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2.0,
+      elevation: 5.0,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch, // Pour éviter les dépassements de colonnes
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
             leading: const CircleAvatar(
@@ -196,7 +232,7 @@ class _PlantPostCardState extends State<PlantPostCard> {
               ? Image.memory(widget.imageData!)
               : const Placeholder(fallbackHeight: 200),
           ButtonBar(
-            alignment: MainAxisAlignment.start,
+            alignment: MainAxisAlignment.center,
             children: [
               TextButton.icon(
                 icon: const Icon(Icons.thumb_up, color: Colors.blue),
@@ -207,9 +243,9 @@ class _PlantPostCardState extends State<PlantPostCard> {
               ),
               TextButton.icon(
                 icon: const Icon(Icons.comment, color: Colors.grey),
-                label: const Text('Commentaire'),
+                label: const Text('Com'),
                 onPressed: () {
-                 showDialog(
+                  showDialog(
                     context: context,
                     builder: (context) {
                       return CustomDialog(
@@ -251,7 +287,8 @@ class CommentBox extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final VoidCallback sendButtonMethod;
 
-  const CommentBox({super.key, 
+  const CommentBox({
+    super.key,
     required this.commentController,
     required this.formKey,
     required this.sendButtonMethod,
@@ -347,5 +384,3 @@ class Commentaire {
     );
   }
 }
-
-

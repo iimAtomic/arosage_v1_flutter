@@ -1,7 +1,6 @@
 import 'package:arosagev1_flutter/animation/FadeAnimation.dart';
 import 'package:arosagev1_flutter/services/inscription_serv.dart';
 import 'package:arosagev1_flutter/views/Login.dart';
-import 'package:arosagev1_flutter/views/connexion.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -240,7 +239,7 @@ class _SignupPageState extends State<SignupPage> {
                                       content: Text('Inscription réussie!')),
                                 );
                                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const LoginPage()), // Remplacez AcceuilScreen par l'écran d'accueil de votre app
+                    MaterialPageRoute(builder: (context) => const  LoginScreen()), // Remplacez AcceuilScreen par l'écran d'accueil de votre app
                   );
                   } else {
                     ScaffoldMessenger.of(context)

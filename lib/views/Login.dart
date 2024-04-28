@@ -1,5 +1,5 @@
 import 'package:arosagev1_flutter/animation/FadeAnimation.dart';
-import 'package:arosagev1_flutter/views/MessagePage.dart';
+import 'package:arosagev1_flutter/views/PlantesFeedPage.dart';
 import 'package:arosagev1_flutter/views/inscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               } else {
                 if (state is LoginSuccess) {
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => MessagePage()));
+                      MaterialPageRoute(builder: (context) => const PlantesFeed()));
                 }
               }
             },

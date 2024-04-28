@@ -106,6 +106,20 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Mon Profil' , style: TextStyle(
+            color: Colors.white, 
+          ),),
+        backgroundColor: const Color(0xFF2C3438),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+         iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
+   
+      ),
       drawer: const CustomDrawer(),
       body: SafeArea(
         child: Stack(
@@ -130,14 +144,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       top: 150,
                       child: CircleAvatar(
                         radius: 70,
-                        backgroundImage: AssetImage("assets/SUKUNA.jpg"),
+                        backgroundImage: AssetImage("assets/jardinier.jpg"),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 80),
                 Text(
-                 _userPseudo ?? 'Sukuna Doe',
+                  _userPseudo ?? 'Sukuna Doe',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
@@ -161,7 +175,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
@@ -172,17 +187,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       var plant = _plantes[index];
                       var photoDataList =
                           plant['photoData'] as List<Map<String, dynamic>>;
-                      var imageData  = photoDataList.isNotEmpty
+                      var imageData = photoDataList.isNotEmpty
                           ? photoDataList[0]['data']
-                          : null; 
+                          : null;
 
                       return GestureDetector(
                         onTap: () => _toggleImage(imageData),
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: MemoryImage(imageData ??
-                                  ''),
+                              image: MemoryImage(imageData ?? ''),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -201,19 +215,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             if (_selectedImage != null) ...[
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () => _toggleImage(null),
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Image.network(
-                        _selectedImage!,
-                        fit: BoxFit.contain,
-                      ),
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () => _toggleImage(null),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.5),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Image.network(
+                          _selectedImage!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
