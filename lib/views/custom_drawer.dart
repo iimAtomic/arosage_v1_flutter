@@ -1,4 +1,5 @@
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
+import 'package:arosagev1_flutter/views/arosage.dart';
 import 'package:arosagev1_flutter/views/plantesPage.dart';
 import 'package:flutter/material.dart';
 import 'MessagePage.dart';
@@ -32,6 +33,16 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const PlantesFeed(),
+              ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.search),
+            title: const Text('A\'rosage c\'est quoi ?'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => arosagePage(),
               ));
             },
           ),
