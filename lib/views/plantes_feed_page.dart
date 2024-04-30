@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'custom_dialog.dart';
@@ -12,11 +12,11 @@ class PlantesFeed extends StatefulWidget {
   const PlantesFeed({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PlantesPageState createState() => _PlantesPageState();
 }
 
 class _PlantesPageState extends State<PlantesFeed> {
-  final _formKey = GlobalKey<FormState>();
   final List<dynamic> _plantes = [];
 
   @override
@@ -55,7 +55,9 @@ class _PlantesPageState extends State<PlantesFeed> {
       }
       setState(() {});
     } else {
-      print("Erreur lors de la récupération des plantes");
+      if (kDebugMode) {
+        print("Erreur lors de la récupération des plantes");
+      }
     }
   }
 
@@ -153,6 +155,7 @@ class PlantPostCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PlantPostCardState createState() => _PlantPostCardState();
 }
 
@@ -179,7 +182,9 @@ class _PlantPostCardState extends State<PlantPostCard> {
         commentaires.add(Commentaire.fromJson(item));
       }
     } else {
-      print("Erreur lors de la récupération des commentaires");
+      if (kDebugMode) {
+        print("Erreur lors de la récupération des commentaires");
+      }
     }
     return commentaires;
   }
@@ -349,7 +354,9 @@ class PhotoAro {
           data: decodedData,
         );
       } catch (e) {
-        print('Error decoding base64 data: $e');
+        if (kDebugMode) {
+          print('Error decoding base64 data: $e');
+        }
         return PhotoAro(
           name: json['name'],
           type: json['type'],

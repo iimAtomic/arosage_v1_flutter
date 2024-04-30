@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:arosagev1_flutter/views/PlantesFeedPage.dart';
+import 'package:arosagev1_flutter/views/plantes_feed_page.dart';
 
 class CustomDialog extends StatelessWidget {
   final Future<List<Commentaire>> futureConseils;

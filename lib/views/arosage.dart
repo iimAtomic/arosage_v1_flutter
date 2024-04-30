@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 
 List<BoxShadow> shadowList = [
   BoxShadow(
@@ -11,13 +10,16 @@ List<BoxShadow> shadowList = [
   // ... add more BoxShadow objects if needed
 ];
 
-class arosagePage extends StatefulWidget {
+class ArosagePage extends StatefulWidget {
+  const ArosagePage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _PageState createState() =>
       _PageState(); // Retourne l'état correct (_PageState)
 }
 
-class _PageState extends State<arosagePage> {
+class _PageState extends State<ArosagePage> {
   bool showText =
       false; // Variable pour contrôler l'affichage de l'animation ou du texte
 
@@ -58,13 +60,11 @@ class _PageState extends State<arosagePage> {
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 500),
                   opacity: showText ? 1.0 : 0.0,
-                  child: Container(
-                    child: const Text(
-                      'A\'rosage   C\'est quoi?',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  child: const Text(
+                    'A\'rosage   C\'est quoi?',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

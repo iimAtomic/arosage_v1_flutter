@@ -1,27 +1,24 @@
+// ignore: file_names
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:arosagev1_flutter/views/custom_drawer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'dart:ui';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   String? _selectedImage;
-  final _formKey = GlobalKey<FormState>();
   final List<dynamic> _plantes = [];
-  final String _nom = '';
-  final String _desc = '';
   String? _userPseudo;
-  XFile? _image;
 
   @override
   void initState() {
@@ -44,7 +41,9 @@ class _ProfilePageState extends State<ProfilePage> {
       headers: {"pseudo": pseudo},
     );
     if (response.statusCode == 200) {
-      print("il existe des plantes ");
+      if (kDebugMode) {
+        print("il existe des plantes ");
+      }
       List<dynamic> plantesData = json.decode(response.body);
 
       // Clear the _plantes list before populating it with new data
@@ -71,7 +70,9 @@ class _ProfilePageState extends State<ProfilePage> {
       }
       setState(() {});
     } else {
-      print("Erreur lors de la récupération des plantes");
+      if (kDebugMode) {
+        print("Erreur lors de la récupération des plantes");
+      }
     }
   }
 
@@ -282,7 +283,9 @@ class PhotoAro {
           data: decodedData,
         );
       } catch (e) {
-        print('Error decoding base64 data: $e');
+        if (kDebugMode) {
+          print('Error decoding base64 data: $e');
+        }
         // Return a default PhotoAro object with empty data if decoding fails
         return PhotoAro(
           name: json['name'],

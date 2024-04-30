@@ -2,8 +2,8 @@ import 'package:arosagev1_flutter/views/ProfilePage.dart';
 import 'package:arosagev1_flutter/views/arosage.dart';
 import 'package:arosagev1_flutter/views/plantesPage.dart';
 import 'package:flutter/material.dart';
-import 'MessagePage.dart';
-import 'PlantesFeedPage.dart';
+import 'message_page.dart';
+import 'plantes_feed_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -42,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => arosagePage(),
+                builder: (context) => const ArosagePage(),
               ));
             },
           ),

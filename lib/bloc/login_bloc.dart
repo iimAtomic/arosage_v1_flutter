@@ -1,6 +1,7 @@
 import 'package:arosagev1_flutter/services/auth_serv.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'package:arosagev1_flutter/event/login_event.dart';
@@ -19,9 +20,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         SecureStorage().writeSecureData("pseudo", user.pseudo);
         SecureStorage().writeSecureData("password", user.password);
         emit(LoginSuccess());
-        print("read pseudo : ");
+        if (kDebugMode) {
+          print("read pseudo : ");
+        }
         SecureStorage().readSecureData("pseudo");
-        print("read password : ");
+        if (kDebugMode) {
+          print("read password : ");
+        }
         SecureStorage().readSecureData("password");
       } catch (error) {
         emit(LoginFailure(error: error.toString()));

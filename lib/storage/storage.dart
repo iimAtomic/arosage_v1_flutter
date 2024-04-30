@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
@@ -9,7 +10,9 @@ class SecureStorage {
 
   Future<String> readSecureData(String key) async {
     String value = await storage.read(key: key) ?? 'No data found!';
-    print('Data read from secure storage: $value');
+    if (kDebugMode) {
+      print('Data read from secure storage: $value');
+    }
     return value;
   }
 

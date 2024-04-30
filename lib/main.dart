@@ -1,4 +1,4 @@
-import 'package:arosagev1_flutter/views/LoadingScreen.dart';
+import 'package:arosagev1_flutter/views/loading_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());

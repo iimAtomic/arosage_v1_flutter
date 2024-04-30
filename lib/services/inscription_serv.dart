@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:arosagev1_flutter/services/auth_serv.dart';
 import 'package:arosagev1_flutter/storage/storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class UserController {
@@ -25,22 +26,36 @@ class UserController {
         },
       );
       if (response.statusCode == 200) {
-        print('Utilisateur créé avec succès');
+        if (kDebugMode) {
+          print('Utilisateur créé avec succès');
+        }
         var data = jsonDecode(response.body.toString());
-        print(data);
+        if (kDebugMode) {
+          print(data);
+        }
         var user = User.fromJson(jsonDecode(response.body));
         SecureStorage().writeSecureData("pseudo", user.pseudo);
         SecureStorage().writeSecureData("password", user.password);
-        print("read pseudo : ");
+        if (kDebugMode) {
+          print("read pseudo : ");
+        }
         SecureStorage().readSecureData("pseudo");
-        print("read password : ");
+        if (kDebugMode) {
+          print("read password : ");
+        }
         SecureStorage().readSecureData("password");
-        print("Session credentials saved : ");
+        if (kDebugMode) {
+          print("Session credentials saved : ");
+        }
       } else {
-        print('Échec de la création de l\'utilisateur: ${response.body}');
+        if (kDebugMode) {
+          print('Échec de la création de l\'utilisateur: ${response.body}');
+        }
       }
     } catch (e) {
-      print('Erreur lors de la communication avec le serveur: $e');
+      if (kDebugMode) {
+        print('Erreur lors de la communication avec le serveur: $e');
+      }
     }
   }
 }

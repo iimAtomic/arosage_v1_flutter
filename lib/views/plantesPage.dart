@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:arosagev1_flutter/storage/storage.dart';
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +15,7 @@ class PlantesPage extends StatefulWidget {
   const PlantesPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PlantesPageState createState() => _PlantesPageState();
 }
 
@@ -42,7 +43,9 @@ class _PlantesPageState extends State<PlantesPage> {
       headers: {"pseudo": pseudo},
     );
     if (response.statusCode == 200) {
-      print("il existe des plantes ");
+      if (kDebugMode) {
+        print("il existe des plantes ");
+      }
       List<dynamic> plantesData = json.decode(response.body);
 
       // Clear the _plantes list before populating it with new data
@@ -69,7 +72,9 @@ class _PlantesPageState extends State<PlantesPage> {
       }
       setState(() {});
     } else {
-      print("Erreur lors de la récupération des plantes");
+      if (kDebugMode) {
+        print("Erreur lors de la récupération des plantes");
+      }
     }
   }
 
@@ -101,16 +106,20 @@ class _PlantesPageState extends State<PlantesPage> {
     var password = await SecureStorage().readSecureData("password");
 
     var request = http.MultipartRequest("POST", url)
-      ..headers['nom'] = _nom
-      ..headers['desc'] = _desc
+      ..headers['nom'] = Uri.encodeFull(_nom)
+      ..headers['desc'] = Uri.encodeFull(_desc)
       ..headers['pseudo'] = pseudo
       ..headers['userPwd'] = password
       ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
     var response = await request.send();
-    print(response.statusCode);
+    if (kDebugMode) {
+      print(response.statusCode);
+    }
 
     if (response.statusCode == 200) {
-      print("Plante ajoutée avec succès");
+      if (kDebugMode) {
+        print("Plante ajoutée avec succès");
+      }
       _fetchPlantes();
     } else {
       // Afficher l'erreur dans un SnackBar
@@ -196,7 +205,8 @@ class _PlantesPageState extends State<PlantesPage> {
             },
           ),
         ],
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
+        iconTheme: const IconThemeData(
+            color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
       ),
       drawer: const CustomDrawer(),
       body: SingleChildScrollView(
@@ -264,12 +274,15 @@ class _PlantesPageState extends State<PlantesPage> {
                                 _addPlante();
                               } else {
                                 _addPlante();
-                                print("Veuillez sélectionner une image");
+                                if (kDebugMode) {
+                                  print("Veuillez sélectionner une image");
+                                }
                               }
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 206, 210, 214),
+                            backgroundColor:
+                                const Color.fromARGB(255, 206, 210, 214),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -340,7 +353,9 @@ class PhotoAro {
           data: decodedData,
         );
       } catch (e) {
-        print('Error decoding base64 data: $e');
+        if (kDebugMode) {
+          print('Error decoding base64 data: $e');
+        }
         // Return a default PhotoAro object with empty data if decoding fails
         return PhotoAro(
           name: json['name'],

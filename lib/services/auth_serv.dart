@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -30,20 +31,30 @@ Future<User> loginAWS(String pseudo , password) async {
         'pwd' : password
       }
     );
-    print(response.statusCode);
+    if (kDebugMode) {
+      print(response.statusCode);
+    }
 
     if(response.statusCode == 200){
       
       var data = jsonDecode(response.body.toString());
-      print(data);
-      print('Login successfully');
+      if (kDebugMode) {
+        print(data);
+      }
+      if (kDebugMode) {
+        print('Login successfully');
+      }
       return User.fromJson(jsonDecode(response.body));
 
     }else {
-      print('failed');
+      if (kDebugMode) {
+        print('failed');
+      }
     }
   }catch(e){
-    print(e.toString());
+    if (kDebugMode) {
+      print(e.toString());
+    }
   }
   throw Exception('Échec de la connexion');
 }

@@ -5,6 +5,7 @@ class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
@@ -23,6 +24,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   _navigateToLogin() async {
     await Future.delayed(const Duration(seconds: 3), () {});
+    // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
