@@ -7,7 +7,6 @@ List<BoxShadow> shadowList = [
     blurRadius: 3,
     offset: const Offset(0, 2),
   ),
-  // ... add more BoxShadow objects if needed
 ];
 
 class ArosagePage extends StatefulWidget {
@@ -16,7 +15,7 @@ class ArosagePage extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _PageState createState() =>
-      _PageState(); // Retourne l'état correct (_PageState)
+      _PageState();
 }
 
 class _PageState extends State<ArosagePage> {

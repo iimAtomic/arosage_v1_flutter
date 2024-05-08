@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:arosagev1_flutter/storage/storage.dart';
@@ -24,7 +22,7 @@ class _PlantesPageState extends State<PlantesPage> {
   final List<dynamic> _plantes = [];
   String _nom = '';
   String _desc = '';
-  XFile? _image;
+  List<XFile>? _image;
 
   @override
   void initState() {
@@ -109,8 +107,14 @@ class _PlantesPageState extends State<PlantesPage> {
       ..headers['nom'] = Uri.encodeFull(_nom)
       ..headers['desc'] = Uri.encodeFull(_desc)
       ..headers['pseudo'] = pseudo
-      ..headers['userPwd'] = password
-      ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
+      ..headers['userPwd'] = password;
+
+    if (_image != null) {
+      for (var file in _image!) {
+        request.files.add(await http.MultipartFile.fromPath('file', file.path));
+      }
+    }
+
     var response = await request.send();
     if (kDebugMode) {
       print(response.statusCode);
@@ -123,6 +127,7 @@ class _PlantesPageState extends State<PlantesPage> {
       _fetchPlantes();
     } else {
       // Afficher l'erreur dans un SnackBar
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -135,37 +140,37 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      setState(() {
-        _image = image;
-      });
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Aperçu de l'image"),
-            content: Image.file(File(_image!.path)),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Annuler'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text('Confirmer'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // Ajoutez d'autres actions si nécessaire
-                },
-              ),
-            ],
-          );
-        },
-      );
+    final List<XFile> images = await picker.pickMultiImage();
+    setState(() {
+      _image = images;
+    });
+    // ignore: use_build_context_synchronously
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Aperçu de l'image"),
+          content: Image.file(File(_image![0] as String)),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Confirmer'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Ajoutez d'autres actions si nécessaire
+              },
+            ),
+          ],
+        );
+      },
+    );
     }
-  }
+
 
   @override
   Widget build(BuildContext context) {

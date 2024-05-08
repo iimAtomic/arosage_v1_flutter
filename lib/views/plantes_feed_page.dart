@@ -1,18 +1,20 @@
 import 'dart:convert';
-import 'package:arosagev1_flutter/storage/storage.dart';
-import 'package:arosagev1_flutter/views/ProfilePage.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'custom_dialog.dart';
-
 import 'custom_drawer.dart';
+import 'package:arosagev1_flutter/storage/storage.dart';
+import 'package:arosagev1_flutter/views/ProfilePage.dart';
 
 class PlantesFeed extends StatefulWidget {
   const PlantesFeed({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _PlantesPageState createState() => _PlantesPageState();
 }
 
@@ -35,22 +37,13 @@ class _PlantesPageState extends State<PlantesFeed> {
       for (var planteData in plantesData) {
         var planteId = planteData["id"];
         var plantePhotos = await _fetchPlantePhotos(planteId);
-        List<Map<String, dynamic>> photoDataList = [];
-        for (var photo in plantePhotos) {
-          photoDataList.add({
-            "name": photo.name,
-            "type": photo.type,
-            "size": photo.size,
-            "data": photo.data,
-          });
-        }
         _plantes.add({
           "id": planteId,
           "nom": planteData["nom"],
           "description": planteData["description"],
           "prenomProprio": planteData["prenomProprio"],
           "pseudoProprio": planteData["pseudoProprio"],
-          "photoData": photoDataList,
+          "photoData": plantePhotos,
         });
       }
       setState(() {});
@@ -61,16 +54,17 @@ class _PlantesPageState extends State<PlantesFeed> {
     }
   }
 
-  Future<List<PhotoAro>> _fetchPlantePhotos(int planteId) async {
+  Future<List<Uint8List>> _fetchPlantePhotos(int planteId) async {
     var url = Uri.parse(
         'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/images');
     var response =
         await http.get(url, headers: {"planteId": planteId.toString()});
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
-      List<PhotoAro> photos = [];
+      List<Uint8List> photos = [];
       for (var item in jsonData) {
-        photos.add(PhotoAro.fromJson(item));
+        var photo = PhotoAro.fromJson(item);
+        photos.add(photo.data);
       }
       return photos;
     } else {
@@ -82,30 +76,7 @@ class _PlantesPageState extends State<PlantesFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Stack(
-          fit: StackFit.expand, // ajouter cette ligne
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                      'assets/plante3.jpg'), // chemin vers votre image
-                  fit: BoxFit.cover, // ajustement de l'image
-                ),
-              ),
-            ),
-            Container(
-              color:
-                  Colors.black.withOpacity(0.5), // couleur sombre avec opacité
-            ),
-          ],
-        ),
-        title: const Text(
-          'Fil d\'actualité',
-          style: TextStyle(
-            color: Colors.white, // couleur du titre
-          ),
-        ),
+        title: const Text('Plantes Feed'),
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle),
@@ -116,7 +87,6 @@ class _PlantesPageState extends State<PlantesFeed> {
             },
           ),
         ],
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255), opacity: 1),
       ),
       drawer: const CustomDrawer(),
       body: ListView.builder(
@@ -126,9 +96,7 @@ class _PlantesPageState extends State<PlantesFeed> {
           return PlantPostCard(
             nom: plante['nom'],
             description: plante['description'],
-            imageData: plante['photoData'].isNotEmpty
-                ? plante['photoData'][0]['data']
-                : null,
+            imageData: plante['photoData'],
             prenom: plante['prenomProprio'],
             planteId: plante['id'],
           );
@@ -137,29 +105,29 @@ class _PlantesPageState extends State<PlantesFeed> {
     );
   }
 }
-
 class PlantPostCard extends StatefulWidget {
   final String nom;
   final String description;
   final String prenom;
-  final Uint8List? imageData;
+  final List<Uint8List> imageData;
   final int planteId;
 
   const PlantPostCard({
     Key? key,
     required this.nom,
     required this.description,
-    this.imageData,
+    required this.imageData,
     required this.prenom,
     required this.planteId,
   }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _PlantPostCardState createState() => _PlantPostCardState();
 }
 
 class _PlantPostCardState extends State<PlantPostCard> {
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
   final TextEditingController _commentController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Future<List<Commentaire>> _futureConseils;
@@ -212,6 +180,13 @@ class _PlantPostCardState extends State<PlantPostCard> {
     }
   }
 
+  void _submitComment() {
+    if (_formKey.currentState!.validate()) {
+      _ajouterConseil(widget.planteId, _commentController.text);
+      _commentController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -233,57 +208,120 @@ class _PlantPostCardState extends State<PlantPostCard> {
             padding: const EdgeInsets.all(8.0),
             child: Text(widget.description),
           ),
-          widget.imageData != null
-              ? Image.memory(widget.imageData!)
-              : const Placeholder(fallbackHeight: 200),
+          if (widget.imageData.isNotEmpty)
+            GestureDetector(
+              onTap: () => _openGallery(context),
+              child: CarouselSlider.builder(
+                itemCount: widget.imageData.length,
+                carouselController: _controller,
+                options: CarouselOptions(
+                    autoPlay: false,
+                    enlargeCenterPage: true,
+                    aspectRatio: 16 / 9,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _current = index;
+                      });
+                    }),
+                itemBuilder: (context, index, realIndex) {
+                  return Image.memory(widget.imageData[index], fit: BoxFit.cover);
+                },
+              ),
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: widget.imageData.asMap().entries.map((entry) {
+              return GestureDetector(
+                onTap: () => _controller.animateToPage(entry.key),
+                child: Container(
+                  width: 12.0,
+                  height: 12.0,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: (Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black)
+                        .withOpacity(_current == entry.key ? 0.9 : 0.4),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
           ButtonBar(
-            alignment: MainAxisAlignment.center,
+            alignment: MainAxisAlignment.start,
             children: [
               TextButton.icon(
                 icon: const Icon(Icons.thumb_up, color: Colors.blue),
                 label: const Text('J\'aime'),
                 onPressed: () {
-                  // Action pour 'J'aime'
+                  // Add functionality for liking the post
                 },
               ),
               TextButton.icon(
                 icon: const Icon(Icons.comment, color: Colors.grey),
-                label: const Text('Com'),
+                label: const Text('Comment'),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CustomDialog(
-                        futureConseils: _futureConseils,
-                        commentController: _commentController,
-                        formKey: _formKey,
-                        sendButtonMethod: () {
-                          if (_formKey.currentState!.validate()) {
-                            _ajouterConseil(
-                              widget.planteId,
-                              _commentController.text,
-                            );
-                            _commentController.clear();
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      );
-                    },
-                  );
+                  // Add functionality for commenting on the post
                 },
               ),
               TextButton.icon(
                 icon: const Icon(Icons.share, color: Colors.grey),
-                label: const Text('Partager'),
+                label: const Text('Share'),
                 onPressed: () {
-                  // Action pour partager
+                  // Add functionality for sharing the post
                 },
               ),
             ],
           ),
+          CommentBox(
+            commentController: _commentController,
+            formKey: _formKey,
+            sendButtonMethod: _submitComment,
+          ),
+          FutureBuilder<List<Commentaire>>(
+            future: _futureConseils,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: snapshot.data!.map((commentaire) {
+                    return ListTile(
+                      title: Text(commentaire.conseil),
+                      subtitle: Text(commentaire.pseudo),
+                    );
+                  }).toList(),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              return CircularProgressIndicator();
+            },
+          ),
         ],
       ),
     );
+  }
+
+  void _openGallery(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => Scaffold(
+        appBar: AppBar(title: Text('Gallery')),
+        body: PhotoViewGallery.builder(
+          itemCount: widget.imageData.length,
+          builder: (context, index) {
+            return PhotoViewGalleryPageOptions(
+              imageProvider: MemoryImage(widget.imageData[index]),
+              minScale: PhotoViewComputedScale.contained * 0.8,
+              maxScale: PhotoViewComputedScale.covered * 2,
+            );
+          },
+          scrollPhysics: const BouncingScrollPhysics(),
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+        ),
+      ),
+    ));
   }
 }
 
