@@ -29,8 +29,12 @@ class _PlantesPageState extends State<PlantesFeed> {
 
   Future<void> _fetchPlantes() async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/all');
-    var response = await http.get(url);
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/all');
+    var jwt = await SecureStorage().readSecureData("jwt_token");
+    var response = await http.get(url,
+      headers: {
+          "authorization": jwt
+          });
     if (response.statusCode == 200) {
       List<dynamic> plantesData = json.decode(response.body);
       _plantes.clear();
@@ -56,9 +60,14 @@ class _PlantesPageState extends State<PlantesFeed> {
 
   Future<List<Uint8List>> _fetchPlantePhotos(int planteId) async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/images');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
+    var jwt = await SecureStorage().readSecureData("jwt_token");
     var response =
-        await http.get(url, headers: {"planteId": planteId.toString()});
+        await http.get(url,
+         headers: {
+          "planteId": planteId.toString(),
+          "authorization": jwt
+          });
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
       List<Uint8List> photos = [];
@@ -105,6 +114,7 @@ class _PlantesPageState extends State<PlantesFeed> {
     );
   }
 }
+
 class PlantPostCard extends StatefulWidget {
   final String nom;
   final String description;
@@ -139,10 +149,16 @@ class _PlantPostCardState extends State<PlantPostCard> {
   }
 
   Future<List<Commentaire>> _fetchConseils(int planteId) async {
+
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/conseils');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/conseils');
+    var jwt = await SecureStorage().readSecureData("jwt_token");
     var response =
-        await http.get(url, headers: {"planteId": planteId.toString()});
+        await http.get(url, 
+        headers: {
+          "planteId": planteId.toString(),
+          "Authorization": "Bearer $jwt",
+          });
     List<Commentaire> commentaires = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
@@ -159,14 +175,16 @@ class _PlantPostCardState extends State<PlantPostCard> {
 
   Future<void> _ajouterConseil(int planteId, String conseil) async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/botaniste/conseil/add');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/botaniste/conseil/add');
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var password = await SecureStorage().readSecureData("password");
+    var jwt = await SecureStorage().readSecureData("jwt_token");
     var response = await http.post(
       url,
       headers: {
         "botanistePseudo": pseudo,
         "pwd": password,
+        "Authorization": "Bearer $jwt",
         "planteId": planteId.toString(),
         "conseil": conseil,
       },
@@ -224,7 +242,8 @@ class _PlantPostCardState extends State<PlantPostCard> {
                       });
                     }),
                 itemBuilder: (context, index, realIndex) {
-                  return Image.memory(widget.imageData[index], fit: BoxFit.cover);
+                  return Image.memory(widget.imageData[index],
+                      fit: BoxFit.cover);
                 },
               ),
             ),
@@ -236,12 +255,13 @@ class _PlantPostCardState extends State<PlantPostCard> {
                 child: Container(
                   width: 12.0,
                   height: 12.0,
-                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 4.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: (Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black)
+                            ? Colors.white
+                            : Colors.black)
                         .withOpacity(_current == entry.key ? 0.9 : 0.4),
                   ),
                 ),
@@ -262,7 +282,27 @@ class _PlantPostCardState extends State<PlantPostCard> {
                 icon: const Icon(Icons.comment, color: Colors.grey),
                 label: const Text('Comment'),
                 onPressed: () {
-                  // Add functionality for commenting on the post
+                    showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomDialog(
+                        futureConseils: _futureConseils,
+                        commentController: _commentController,
+                        formKey: _formKey,
+                        sendButtonMethod: () {
+                          if (_formKey.currentState!.validate()) {
+                            _ajouterConseil(
+                              widget.planteId,
+                              _commentController.text,
+                            );
+                            _commentController.clear();
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
+                    },
+                  );
+
                 },
               ),
               TextButton.icon(

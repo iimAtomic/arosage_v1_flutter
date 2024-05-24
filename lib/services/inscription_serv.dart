@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class UserController {
-  static const String _baseUrl = 'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/add';
+  static const String _baseUrl = 'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/add';
 
   static Future<void> addUser(String nom, String prenom, String pseudo, String email, String rue, String codeRole, String nomVille, String codePostale, String pwd) async {
     try {

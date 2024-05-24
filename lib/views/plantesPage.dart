@@ -32,13 +32,17 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _fetchPlantes() async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/plante');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/plante');
 
     var pseudo = await SecureStorage().readSecureData("pseudo");
-
+    var jwt = await SecureStorage().readSecureData("jwt_token");
+   
     var response = await http.get(
       url,
-      headers: {"pseudo": pseudo},
+      headers: {
+        "pseudo": pseudo,
+        "Authorization": "Bearer $jwt",
+        },
     );
     if (response.statusCode == 200) {
       if (kDebugMode) {
@@ -78,10 +82,14 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<List<PhotoAro>> _fetchPlantePhotos(int planteId) async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/images');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
+    var jwt = await SecureStorage().readSecureData("jwt_token");
     var response = await http.get(
       url,
-      headers: {"planteId": planteId.toString()},
+      headers: {
+        "planteId": planteId.toString(),
+        "Authorization": "Bearer $jwt",
+        },
     );
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
@@ -98,16 +106,18 @@ class _PlantesPageState extends State<PlantesPage> {
   Future<void> _addPlante() async {
     // Ajouter une nouvelle plante
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/add');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/add');
 
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var password = await SecureStorage().readSecureData("password");
+    var jwt = await SecureStorage().readSecureData("jwt_token");
 
     var request = http.MultipartRequest("POST", url)
       ..headers['nom'] = Uri.encodeFull(_nom)
       ..headers['desc'] = Uri.encodeFull(_desc)
       ..headers['pseudo'] = pseudo
-      ..headers['userPwd'] = password;
+      ..headers['userPwd'] = password
+      ..headers['authorization'] = "Bearer $jwt";
 
     if (_image != null) {
       for (var file in _image!) {

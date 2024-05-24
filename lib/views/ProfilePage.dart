@@ -34,11 +34,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _fetchPlantes() async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/user/v1/plante');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/plante');
     var pseudo = await SecureStorage().readSecureData("pseudo");
+    var jwt = await SecureStorage().readSecureData("jwt_token");
     var response = await http.get(
       url,
-      headers: {"pseudo": pseudo},
+      headers: {
+        "pseudo": pseudo,
+        "Authorization": "Bearer $jwt",
+                },
     );
     if (response.statusCode == 200) {
       if (kDebugMode) {
@@ -78,10 +82,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<List<PhotoAro>> _fetchPlantePhotos(int planteId) async {
     var url = Uri.parse(
-        'http://ec2-13-39-86-184.eu-west-3.compute.amazonaws.com/api/plante/v2/images');
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
+    var jwt = await SecureStorage().readSecureData("jwt_token");
     var response = await http.get(
       url,
-      headers: {"planteId": planteId.toString()},
+      headers: {
+        "planteId": planteId.toString(),
+        "Authorization": "Bearer $jwt",
+        },
     );
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
