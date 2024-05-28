@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 Future<User> loginAWS(String pseudo, String password) async {
-  final url = Uri.parse('http://127.0.0.1:3000/api/public/login');
+  final url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/public/login');
   final secureStorage = SecureStorage();
 
   try {

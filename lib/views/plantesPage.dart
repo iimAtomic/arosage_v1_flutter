@@ -13,7 +13,6 @@ class PlantesPage extends StatefulWidget {
   const PlantesPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _PlantesPageState createState() => _PlantesPageState();
 }
 
@@ -22,7 +21,7 @@ class _PlantesPageState extends State<PlantesPage> {
   final List<dynamic> _plantes = [];
   String _nom = '';
   String _desc = '';
-  List<XFile>? _image;
+  List<XFile>? _images;
 
   @override
   void initState() {
@@ -31,18 +30,16 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<void> _fetchPlantes() async {
-    var url = Uri.parse(
-        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/plante');
-
+    var url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/plante');
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var jwt = await SecureStorage().readSecureData("jwt_token");
-   
+
     var response = await http.get(
       url,
       headers: {
         "pseudo": pseudo,
         "Authorization": "Bearer $jwt",
-        },
+      },
     );
     if (response.statusCode == 200) {
       if (kDebugMode) {
@@ -50,7 +47,6 @@ class _PlantesPageState extends State<PlantesPage> {
       }
       List<dynamic> plantesData = json.decode(response.body);
 
-      // Clear the _plantes list before populating it with new data
       _plantes.clear();
 
       for (var planteData in plantesData) {
@@ -81,15 +77,14 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<List<PhotoAro>> _fetchPlantePhotos(int planteId) async {
-    var url = Uri.parse(
-        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
+    var url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
     var jwt = await SecureStorage().readSecureData("jwt_token");
     var response = await http.get(
       url,
       headers: {
         "planteId": planteId.toString(),
         "Authorization": "Bearer $jwt",
-        },
+      },
     );
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
@@ -104,10 +99,7 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<void> _addPlante() async {
-    // Ajouter une nouvelle plante
-    var url = Uri.parse(
-        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/add');
-
+    var url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/add');
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var password = await SecureStorage().readSecureData("password");
     var jwt = await SecureStorage().readSecureData("jwt_token");
@@ -119,8 +111,8 @@ class _PlantesPageState extends State<PlantesPage> {
       ..headers['userPwd'] = password
       ..headers['authorization'] = "Bearer $jwt";
 
-    if (_image != null) {
-      for (var file in _image!) {
+    if (_images != null) {
+      for (var file in _images!) {
         request.files.add(await http.MultipartFile.fromPath('file', file.path));
       }
     }
@@ -136,12 +128,9 @@ class _PlantesPageState extends State<PlantesPage> {
       }
       _fetchPlantes();
     } else {
-      // Afficher l'erreur dans un SnackBar
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              'Erreur lors de l\'ajout de la plante: ${response.reasonPhrase}'),
+          content: Text('Erreur lors de l\'ajout de la plante: ${response.reasonPhrase}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -150,64 +139,75 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile> images = await picker.pickMultiImage();
-    setState(() {
-      _image = images;
-    });
-    // ignore: use_build_context_synchronously
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Aperçu de l'image"),
-          content: Image.file(File(_image![0] as String)),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Annuler'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Confirmer'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Ajoutez d'autres actions si nécessaire
-              },
-            ),
-          ],
-        );
-      },
-    );
-    }
+    final List<XFile>? images = await picker.pickMultiImage();
+    if (images != null) {
+      setState(() {
+        _images = images;
+      });
 
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Aperçu de l'image"),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                itemCount: _images?.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Image.file(File(_images![index].path)),
+                  );
+                },
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Annuler'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text('Confirmer'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Ajoutez d'autres actions si nécessaire
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Stack(
-          fit: StackFit.expand, // ajouter cette ligne
+          fit: StackFit.expand,
           children: [
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(
-                      'assets/plante3.jpg'), // chemin vers votre image
-                  fit: BoxFit.cover, // ajustement de l'image
+                  image: AssetImage('assets/plante3.jpg'),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
             Container(
-              color:
-                  Colors.black.withOpacity(0.5), // couleur sombre avec opacité
+              color: Colors.black.withOpacity(0.5),
             ),
           ],
         ),
         title: const Text(
           'Mes plantes',
           style: TextStyle(
-            color: Colors.white, // couleur du titre
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -285,19 +285,20 @@ class _PlantesPageState extends State<PlantesPage> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              if (_image != null) {
+                              if (_images != null) {
                                 _addPlante();
                               } else {
-                                _addPlante();
-                                if (kDebugMode) {
-                                  print("Veuillez sélectionner une image");
-                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Veuillez sélectionner une image'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
                               }
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 206, 210, 214),
+                            backgroundColor: const Color.fromARGB(255, 206, 210, 214),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -316,7 +317,10 @@ class _PlantesPageState extends State<PlantesPage> {
                   List<dynamic> photoDataList = plante['photoData'];
                   for (var photoData in photoDataList) {
                     Uint8List imageData = photoData['data'];
-                    photos.add(Image.memory(imageData));
+                    photos.add(Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Image.memory(imageData),
+                    ));
                   }
                 }
                 return Card(
@@ -350,16 +354,16 @@ class PhotoAro {
   late int size;
   late Uint8List data;
 
-  PhotoAro(
-      {required this.name,
-      required this.type,
-      required this.size,
-      required this.data});
+  PhotoAro({
+    required this.name,
+    required this.type,
+    required this.size,
+    required this.data,
+  });
 
   factory PhotoAro.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('data') && json['data'] != null) {
       try {
-        // Decode the base64 encoded data to Uint8List
         Uint8List decodedData = base64.decode(json['data']);
         return PhotoAro(
           name: json['name'],
@@ -371,21 +375,19 @@ class PhotoAro {
         if (kDebugMode) {
           print('Error decoding base64 data: $e');
         }
-        // Return a default PhotoAro object with empty data if decoding fails
         return PhotoAro(
           name: json['name'],
           type: json['type'],
           size: json['size'],
-          data: Uint8List(0), // Empty Uint8List
+          data: Uint8List(0),
         );
       }
     } else {
-      // Return a default PhotoAro object with empty data if 'data' field is missing or null
       return PhotoAro(
         name: json['name'],
         type: json['type'],
         size: json['size'],
-        data: Uint8List(0), // Empty Uint8List
+        data: Uint8List(0),
       );
     }
   }

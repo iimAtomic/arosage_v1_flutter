@@ -15,10 +15,10 @@ class PlantesFeed extends StatefulWidget {
   const PlantesFeed({super.key});
 
   @override
-  _PlantesPageState createState() => _PlantesPageState();
+  _PlantesFeedState createState() => _PlantesFeedState();
 }
 
-class _PlantesPageState extends State<PlantesFeed> {
+class _PlantesFeedState extends State<PlantesFeed> {
   final List<dynamic> _plantes = [];
 
   @override
@@ -31,10 +31,9 @@ class _PlantesPageState extends State<PlantesFeed> {
     var url = Uri.parse(
         'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/all');
     var jwt = await SecureStorage().readSecureData("jwt_token");
-    var response = await http.get(url,
-      headers: {
-          "authorization": jwt
-          });
+    var response = await http.get(url, headers: {
+      "Authorization": "Bearer $jwt",
+    });
     if (response.statusCode == 200) {
       List<dynamic> plantesData = json.decode(response.body);
       _plantes.clear();
@@ -62,12 +61,10 @@ class _PlantesPageState extends State<PlantesFeed> {
     var url = Uri.parse(
         'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
     var jwt = await SecureStorage().readSecureData("jwt_token");
-    var response =
-        await http.get(url,
-         headers: {
-          "planteId": planteId.toString(),
-          "authorization": jwt
-          });
+    var response = await http.get(url, headers: {
+      "planteId": planteId.toString(),
+      "Authorization": "Bearer $jwt",
+    });
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
       List<Uint8List> photos = [];
@@ -149,16 +146,13 @@ class _PlantPostCardState extends State<PlantPostCard> {
   }
 
   Future<List<Commentaire>> _fetchConseils(int planteId) async {
-
     var url = Uri.parse(
         'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/conseils');
     var jwt = await SecureStorage().readSecureData("jwt_token");
-    var response =
-        await http.get(url, 
-        headers: {
-          "planteId": planteId.toString(),
-          "Authorization": "Bearer $jwt",
-          });
+    var response = await http.get(url, headers: {
+      "planteId": planteId.toString(),
+      "Authorization": "Bearer $jwt",
+    });
     List<Commentaire> commentaires = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
@@ -280,9 +274,9 @@ class _PlantPostCardState extends State<PlantPostCard> {
               ),
               TextButton.icon(
                 icon: const Icon(Icons.comment, color: Colors.grey),
-                label: const Text('Comment'),
+                label: const Text('Commenter'),
                 onPressed: () {
-                    showDialog(
+                  showDialog(
                     context: context,
                     builder: (context) {
                       return CustomDialog(
@@ -302,14 +296,13 @@ class _PlantPostCardState extends State<PlantPostCard> {
                       );
                     },
                   );
-
                 },
               ),
               TextButton.icon(
                 icon: const Icon(Icons.share, color: Colors.grey),
-                label: const Text('Share'),
+                label: const Text('Partager'),
                 onPressed: () {
-                  // Add functionality for sharing the post
+                  
                 },
               ),
             ],
@@ -345,7 +338,7 @@ class _PlantPostCardState extends State<PlantPostCard> {
   void _openGallery(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => Scaffold(
-        appBar: AppBar(title: Text('Gallery')),
+        appBar: AppBar(title: const Text('Gallery')),
         body: PhotoViewGallery.builder(
           itemCount: widget.imageData.length,
           builder: (context, index) {
