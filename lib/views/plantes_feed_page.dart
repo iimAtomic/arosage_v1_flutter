@@ -42,8 +42,8 @@ class _PlantesFeedState extends State<PlantesFeed> {
         var plantePhotos = await _fetchPlantePhotos(planteId);
         _plantes.add({
           "id": planteId,
-          "nom": planteData["nom"],
-          "description": planteData["description"],
+          "nom": Uri.decodeComponent(planteData["nom"]),
+          "description": Uri.decodeComponent(planteData["description"]),
           "prenomProprio": planteData["prenomProprio"],
           "pseudoProprio": planteData["pseudoProprio"],
           "photoData": plantePhotos,
@@ -307,29 +307,29 @@ class _PlantPostCardState extends State<PlantPostCard> {
               ),
             ],
           ),
-          CommentBox(
-            commentController: _commentController,
-            formKey: _formKey,
-            sendButtonMethod: _submitComment,
-          ),
-          FutureBuilder<List<Commentaire>>(
-            future: _futureConseils,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: snapshot.data!.map((commentaire) {
-                    return ListTile(
-                      title: Text(commentaire.conseil),
-                      subtitle: Text(commentaire.pseudo),
-                    );
-                  }).toList(),
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              }
-              return CircularProgressIndicator();
-            },
-          ),
+          // CommentBox(
+          //   commentController: _commentController,
+          //   formKey: _formKey,
+          //   sendButtonMethod: _submitComment,
+          // ),
+          // FutureBuilder<List<Commentaire>>(
+          //   future: _futureConseils,
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasData) {
+          //       return Column(
+          //         children: snapshot.data!.map((commentaire) {
+          //           return ListTile(
+          //             title: Text(commentaire.conseil),
+          //             subtitle: Text(commentaire.pseudo),
+          //           );
+          //         }).toList(),
+          //       );
+          //     } else if (snapshot.hasError) {
+          //       return Text('Error: ${snapshot.error}');
+          //     }
+          //     return CircularProgressIndicator();
+          //   },
+          // ),
         ],
       ),
     );

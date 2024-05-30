@@ -1,6 +1,8 @@
 import 'package:arosagev1_flutter/views/ProfilePage.dart';
 import 'package:arosagev1_flutter/views/arosage.dart';
+import 'package:arosagev1_flutter/views/map.dart';
 import 'package:arosagev1_flutter/views/plantesPage.dart';
+import 'package:arosagev1_flutter/services/auth_serv.dart';
 import 'package:flutter/material.dart';
 import 'message_page.dart';
 import 'plantes_feed_page.dart';
@@ -15,12 +17,12 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           const DrawerHeader(
-             decoration: BoxDecoration(
-               image: DecorationImage(
-                          image: AssetImage("assets/plante3.jpg"),
-                          fit: BoxFit.cover,
-                        ),
-             ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/plante3.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Text(
               'Menu',
               style: TextStyle(color: Colors.white, fontSize: 25),
@@ -74,6 +76,24 @@ class CustomDrawer extends StatelessWidget {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const ProfilePage(),
               ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.map),
+            title: const Text('Carte'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MapPage(),
+              ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Déconnexion'),
+            onTap: () {
+              Navigator.pop(context);
+              logout(context);
             },
           ),
           // Ajoutez d'autres options de menu ici

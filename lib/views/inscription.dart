@@ -1,6 +1,7 @@
 import 'package:arosagev1_flutter/animation/FadeAnimation.dart';
 import 'package:arosagev1_flutter/services/inscription_serv.dart';
 import 'package:arosagev1_flutter/views/Login.dart';
+import 'package:arosagev1_flutter/views/rgpd.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _pwdController = TextEditingController();
   final TextEditingController _pwdCheckController = TextEditingController();
   String dropdownValue = 'P'; // Default value
+  bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -183,28 +185,64 @@ class _SignupPageState extends State<SignupPage> {
                               border: InputBorder.none),
                         ),
                       ),
-                      DropdownButtonFormField<String>(
+                      Container(
                         padding: const EdgeInsets.all(10),
-                        value: dropdownValue,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            setState(() {
-                              dropdownValue = value;
-                              _codeRoleController.text = value;
-                            });
-                          }
-                        },
-                        items: const [
-                          DropdownMenuItem(
-                              value: 'P', child: Text('Propriétaire')),
-                          DropdownMenuItem(value: 'G', child: Text('Gardien')),
-                          DropdownMenuItem(
-                              value: 'B', child: Text('Botaniste')),
-                        ],
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                    BorderSide(color: Colors.grey.shade200))),
+                        child: DropdownButtonFormField<String>(
+                          value: dropdownValue,
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              setState(() {
+                                dropdownValue = value;
+                                _codeRoleController.text = value;
+                              });
+                            }
+                          },
+                          items: const [
+                            DropdownMenuItem(
+                                value: 'P', child: Text('Propriétaire')),
+                            DropdownMenuItem(
+                                value: 'G', child: Text('Gardien')),
+                            DropdownMenuItem(
+                                value: 'B', child: Text('Botaniste')),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 )),
+            const SizedBox(
+              height: 40,
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: _isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isChecked = value ?? false;
+                    });
+                  },
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RgpdPage(),
+                      ));
+                    },
+                    child: const Text(
+                      'Accepter nos Conditions d\'utilisation',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(
               height: 40,
             ),
@@ -214,51 +252,53 @@ class _SignupPageState extends State<SignupPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
               ),
-              onPressed: () {
-                if (_pwdController.text == _pwdCheckController.text) {
-                  if (_nomController.text.isNotEmpty &&
-                      _prenomController.text.isNotEmpty &&
-                      _pseudoController.text.isNotEmpty &&
-                      _emailController.text.isNotEmpty &&
-                      _rueController.text.isNotEmpty &&
-                      _nomVilleController.text.isNotEmpty &&
-                      _codePostaleController.text.isNotEmpty &&
-                      _pwdController.text.isNotEmpty) {
-                    UserController.addUser(
-                      _nomController.text,
-                      _prenomController.text,
-                      _pseudoController.text,
-                      _emailController.text,
-                      _rueController.text,
-                      _codeRoleController.text,
-                      _nomVilleController.text,
-                      _codePostaleController.text,
-                      _pwdController.text,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Inscription réussie!')),
-                                );
-                                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const  LoginScreen()), // Remplacez AcceuilScreen par l'écran d'accueil de votre app
-                  );
-                  } else {
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(const SnackBar(
-                        content: Text("Au moins un champs non rempli"),
-                        duration: Duration(seconds: 3),
-                      ));
-                  }
-                } else {
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(const SnackBar(
-                      content: Text("Les mots de passes ne correspondent pas."),
-                      duration: Duration(seconds: 3),
-                    ));
-                }
-              },
+              onPressed: _isChecked
+                  ? () {
+                      if (_pwdController.text == _pwdCheckController.text) {
+                        if (_nomController.text.isNotEmpty &&
+                            _prenomController.text.isNotEmpty &&
+                            _pseudoController.text.isNotEmpty &&
+                            _emailController.text.isNotEmpty &&
+                            _rueController.text.isNotEmpty &&
+                            _nomVilleController.text.isNotEmpty &&
+                            _codePostaleController.text.isNotEmpty &&
+                            _pwdController.text.isNotEmpty) {
+                          UserController.addUser(
+                            _nomController.text,
+                            _prenomController.text,
+                            _pseudoController.text,
+                            _emailController.text,
+                            _rueController.text,
+                            _codeRoleController.text,
+                            _nomVilleController.text,
+                            _codePostaleController.text,
+                            _pwdController.text,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Inscription réussie!')),
+                          );
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(const SnackBar(
+                              content: Text("Au moins un champ non rempli"),
+                              duration: Duration(seconds: 3),
+                            ));
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(const SnackBar(
+                            content: Text("Les mots de passe ne correspondent pas."),
+                            duration: Duration(seconds: 3),
+                          ));
+                      }
+                    }
+                  : null,
               child: const Center(
                 child: Text(
                   "S'inscrire",
@@ -270,16 +310,17 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
             MaterialButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ));
-                },
-                child: const Text(
-                  "Se connecter",
-                  style: TextStyle(color: Colors.grey),
-                )),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ));
+              },
+              child: const Text(
+                "Se connecter",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
           ],
         ),
       ),

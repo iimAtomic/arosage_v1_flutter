@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:arosagev1_flutter/storage/storage.dart';
+import 'package:arosagev1_flutter/views/Login.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
 import 'package:http/http.dart';
 
 Future<User> loginAWS(String pseudo, String password) async {
-  final url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/public/login');
+  final url = Uri.parse(
+      'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/public/login');
   final secureStorage = SecureStorage();
 
   try {
@@ -83,5 +86,28 @@ class User {
       prenom: json['prenom'] ?? 'Unknown',
       password: json['pwd'] ?? '',
     );
+  }
+
+
+
+}
+
+Future<void> logout(BuildContext context) async {
+  final secureStorage = SecureStorage();
+
+  try {
+    await secureStorage.deleteSecureData('jwt_token');
+    if (kDebugMode) {
+      print('Token removed');
+    }
+
+      Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+  
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error: ${e.toString()}');
+    }
+    throw Exception('Échec de la déconnexion');
   }
 }

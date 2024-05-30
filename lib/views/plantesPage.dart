@@ -30,7 +30,8 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<void> _fetchPlantes() async {
-    var url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/plante');
+    var url = Uri.parse(
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/user/v1/plante');
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var jwt = await SecureStorage().readSecureData("jwt_token");
 
@@ -63,8 +64,8 @@ class _PlantesPageState extends State<PlantesPage> {
         }
         _plantes.add({
           "id": planteId,
-          "nom": planteData["nom"],
-          "description": planteData["description"],
+          "nom": Uri.decodeComponent(planteData["nom"]),
+          "description": Uri.decodeComponent(planteData["description"]),
           "photoData": photoDataList,
         });
       }
@@ -77,7 +78,8 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<List<PhotoAro>> _fetchPlantePhotos(int planteId) async {
-    var url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
+    var url = Uri.parse(
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/images');
     var jwt = await SecureStorage().readSecureData("jwt_token");
     var response = await http.get(
       url,
@@ -99,14 +101,15 @@ class _PlantesPageState extends State<PlantesPage> {
   }
 
   Future<void> _addPlante() async {
-    var url = Uri.parse('http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/add');
+    var url = Uri.parse(
+        'http://ec2-54-163-5-132.compute-1.amazonaws.com/api/plante/v2/add');
     var pseudo = await SecureStorage().readSecureData("pseudo");
     var password = await SecureStorage().readSecureData("password");
     var jwt = await SecureStorage().readSecureData("jwt_token");
 
     var request = http.MultipartRequest("POST", url)
-      ..headers['nom'] = Uri.encodeFull(_nom)
-      ..headers['desc'] = Uri.encodeFull(_desc)
+      ..headers['nom'] = Uri.encodeComponent(_nom)
+      ..headers['desc'] = Uri.encodeComponent(_desc)
       ..headers['pseudo'] = pseudo
       ..headers['userPwd'] = password
       ..headers['authorization'] = "Bearer $jwt";
@@ -130,7 +133,8 @@ class _PlantesPageState extends State<PlantesPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erreur lors de l\'ajout de la plante: ${response.reasonPhrase}'),
+          content: Text(
+              'Erreur lors de l\'ajout de la plante: ${response.reasonPhrase}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -139,49 +143,43 @@ class _PlantesPageState extends State<PlantesPage> {
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile>? images = await picker.pickMultiImage();
-    if (images != null) {
-      setState(() {
-        _images = images;
-      });
-
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Aperçu de l'image"),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView.builder(
-                itemCount: _images?.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Image.file(File(_images![index].path)),
-                  );
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () async {
+                  final List<XFile>? images = await picker.pickMultiImage();
+                  if (images != null) {
+                    setState(() {
+                      _images = images;
+                    });
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Annuler'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text('Confirmer'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // Ajoutez d'autres actions si nécessaire
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Camera'),
+                onTap: () async {
+                  final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                  if (image != null) {
+                    setState(() {
+                      _images = [image];
+                    });
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
             ],
-          );
-        },
-      );
-    }
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -290,7 +288,8 @@ class _PlantesPageState extends State<PlantesPage> {
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Veuillez sélectionner une image'),
+                                    content:
+                                        Text('Veuillez sélectionner une image'),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -298,7 +297,8 @@ class _PlantesPageState extends State<PlantesPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 206, 210, 214),
+                            backgroundColor:
+                                const Color.fromARGB(255, 206, 210, 214),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
